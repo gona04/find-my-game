@@ -9,11 +9,12 @@ export interface Game {
   title: string;
   genres: string[];
   mood: string[];
-  sessionLength: SessionLength;
   rewardPotential: RewardPotential;
   rewardFrequency: RewardFrequency;
+  sessionLength: SessionLength;
+  storyline: boolean;
   progression: Progression;
   complexity: Complexity;
-  storyline: boolean;
   description: string;
+  imageUrl: string;
 }

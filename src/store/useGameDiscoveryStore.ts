@@ -33,7 +33,7 @@ const actions = {
     setState({ loading: true, error: null, streamingStatus: 'Thinking...', recommendations: [] });
     try {
       const keywordPreferences = extractKeywordPreferences(currentQuery);
-      const routingPath: RoutingPath = hasMeaningfulPreferences(keywordPreferences) ? 'keyword' : 'llm';
+      const routingPath: RoutingPath = hasMeaningfulPreferences(keywordPreferences, currentQuery) ? 'keyword' : 'llm';
       const preferences = routingPath === 'keyword'
         ? keywordPreferences
         : await extractPreferences(currentQuery, (streamingStatus) => setState({ streamingStatus }));

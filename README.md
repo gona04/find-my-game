@@ -1,6 +1,6 @@
 # AI Game Concierge
 
-AI Game Concierge is a production-minded Expo + TypeScript prototype for Cash Giraffe. It lets players describe what they want to play right now and turns that natural-language intent into explainable game recommendations.
+AI Game Concierge is a production-minded Expo + TypeScript prototype for Cash Giraffe. The app presents a Quest Log rewards home and an Explore More discovery surface where players describe what they want to play right now and receive explainable game recommendations.
 
 ## Problem Statement
 
@@ -12,25 +12,25 @@ If users can express their current gaming intent in natural language, Cash Giraf
 
 ## Architecture Overview
 
-- `src/pages` contains screen-level UI for Discover and AI Game Concierge.
+- `src/pages` contains screen-level UI for Quest Log and Explore More.
 - `src/components` contains reusable presentation primitives and recommendation-specific cards/lists.
 - `src/store/useGameDiscoveryStore.ts` owns query, loading, routing, errors, and recommendations.
 - `src/utils/gameMatcher.ts` performs local keyword-to-preference extraction.
-- `src/services/recommendationService.ts` scores games and returns the top five matches.
+- `src/services/recommendationService.ts` scores games across title, genres, mood, rich descriptions, and structured attributes, then returns the top five matches.
 - `src/services/llmService.ts` calls DeepSeek only for ambiguous intent.
 - `src/constants` defines the light, friendly visual system.
 
 ## Routing Logic
 
 1. The user submits a natural-language query.
-2. The app first runs local keyword extraction.
-3. If meaningful preferences are found, recommendations are generated locally and `routingPath` is `keyword`.
+2. The app first runs local keyword extraction and catalog inspection across title, genres, mood, description, and structured attributes.
+3. If meaningful preferences or strong catalog matches are found, recommendations are generated locally and `routingPath` is `keyword`.
 4. If the query is ambiguous, the app streams a DeepSeek request and `routingPath` is `llm`.
 5. DeepSeek returns structured JSON preferences, never user-facing chat copy.
 
 ## AI Flow
 
-Natural Language → Intent Extraction → Structured Preferences → Weighted Game Matching → Explainable Recommendations
+Natural Language → Catalog + Keyword Inspection → Optional AI Intent Extraction → Structured Preferences → Weighted Game Matching → Explainable Recommendations
 
 DeepSeek is used as a preference extraction service, not as a chatbot. The UI presents recommendation results rather than a conversational transcript.
 
@@ -47,7 +47,7 @@ The recommendation engine applies weighted scoring:
 - Complexity Match: +2
 - Session Length Match: +2
 
-Each result includes `score` and `matchReason` so users understand the recommendation.
+Each result includes `score` and `matchReason` so users understand the recommendation. Description matches add semantic weight because game descriptions contain richer intent signals than tags alone.
 
 ## Why Zustand
 
