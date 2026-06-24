@@ -1,0 +1,14 @@
+import React, { memo, useMemo } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Card } from '../components/common/Card';
+import { colors } from '../constants/colors';
+import { spacing } from '../constants/spacing';
+import { games } from '../data/games';
+
+const GameRow = memo(({ title }: { title: string }) => <Card style={styles.game}><Text style={styles.gameTitle}>{title}</Text><Text style={styles.gameMeta}>Play now • Earn gems</Text></Card>);
+export const DiscoverPage = () => {
+  const keepPlaying = useMemo(() => games.slice(0, 3), []);
+  const recommended = useMemo(() => games.slice(3, 7), []);
+  return <ScrollView style={styles.container} contentContainerStyle={styles.content}><View style={styles.header}><View><Text style={styles.eyebrow}>Cash Giraffe</Text><Text style={styles.title}>Discover</Text></View><View style={styles.gems}><Text style={styles.gemText}>💎 2,450</Text></View></View><Card style={styles.reward}><Text style={styles.cardTitle}>Daily Reward</Text><Text style={styles.rewardText}>Open today’s pick and collect bonus gems.</Text></Card><Card style={styles.boost}><Text style={styles.boostTitle}>⚡ 2x Boost Active</Text><Text style={styles.rewardText}>Play boosted games to maximize your next session.</Text></Card><Text style={styles.section}>Keep Playing</Text>{keepPlaying.map((game) => <GameRow key={game.id} title={game.title} />)}<Text style={styles.section}>Recommended For You</Text>{recommended.map((game) => <GameRow key={game.id} title={game.title} />)}</ScrollView>;
+};
+const styles = StyleSheet.create({ container: { flex: 1, backgroundColor: colors.background }, content: { padding: spacing.lg, paddingBottom: spacing.xl }, header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.lg }, eyebrow: { color: colors.textSecondary, fontWeight: '700' }, title: { color: colors.textPrimary, fontSize: 34, fontWeight: '900' }, gems: { backgroundColor: colors.badge, borderRadius: spacing.borderRadius.xl, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }, gemText: { color: colors.badgeText, fontWeight: '900' }, reward: { backgroundColor: colors.primary, marginBottom: spacing.md }, cardTitle: { color: colors.surface, fontSize: 22, fontWeight: '900' }, rewardText: { color: colors.surface, opacity: 0.9, marginTop: spacing.xs }, boost: { backgroundColor: colors.secondary, marginBottom: spacing.lg }, boostTitle: { color: colors.textPrimary, fontSize: 20, fontWeight: '900' }, section: { color: colors.textPrimary, fontSize: 20, fontWeight: '900', marginVertical: spacing.md }, game: { marginBottom: spacing.sm }, gameTitle: { color: colors.textPrimary, fontWeight: '900', fontSize: 16 }, gameMeta: { color: colors.textSecondary, marginTop: spacing.xs } });

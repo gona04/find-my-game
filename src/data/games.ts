@@ -1,0 +1,12 @@
+import { Game } from '../types/Game';
+
+export const games: Game[] = [
+  { id: '1', title: 'Merge Meadow', genres: ['Merge', 'Puzzle'], mood: ['Relaxing', 'Cozy'], sessionLength: 'short', rewardPotential: 'medium', rewardFrequency: 'high', progression: 'medium', complexity: 'easy', storyline: false, description: 'A cozy merge puzzler for quick, calm sessions.' },
+  { id: '2', title: 'Logic Legends', genres: ['Logic', 'Puzzle'], mood: ['Challenging', 'Focused'], sessionLength: 'medium', rewardPotential: 'medium', rewardFrequency: 'medium', progression: 'medium', complexity: 'hard', storyline: false, description: 'Brain-teasing logic stages with satisfying mastery.' },
+  { id: '3', title: 'Kingdom Runner', genres: ['Adventure', 'Action'], mood: ['Immersive', 'Exciting'], sessionLength: 'long', rewardPotential: 'high', rewardFrequency: 'medium', progression: 'high', complexity: 'medium', storyline: true, description: 'A story-rich action adventure with long-term progression.' },
+  { id: '4', title: 'Gem Tycoon Idle', genres: ['Idle', 'Strategy'], mood: ['Rewarding', 'Relaxing'], sessionLength: 'short', rewardPotential: 'high', rewardFrequency: 'high', progression: 'high', complexity: 'easy', storyline: false, description: 'Build income streams and collect frequent rewards.' },
+  { id: '5', title: 'Racing Rush', genres: ['Racing', 'Competitive'], mood: ['Fast', 'Competitive'], sessionLength: 'short', rewardPotential: 'medium', rewardFrequency: 'medium', progression: 'medium', complexity: 'medium', storyline: false, description: 'Fast races for competitive bursts.' },
+  { id: '6', title: 'Mystic RPG Quest', genres: ['RPG', 'Adventure'], mood: ['Immersive', 'Epic'], sessionLength: 'long', rewardPotential: 'high', rewardFrequency: 'medium', progression: 'high', complexity: 'hard', storyline: true, description: 'A deep RPG for players who want narrative and growth.' },
+  { id: '7', title: 'Card Clash Arena', genres: ['Card', 'Strategy', 'Competitive'], mood: ['Strategic', 'Competitive'], sessionLength: 'medium', rewardPotential: 'medium', rewardFrequency: 'high', progression: 'medium', complexity: 'hard', storyline: false, description: 'Competitive card battles with strategic deck building.' },
+  { id: '8', title: 'Rhythm Stars', genres: ['Music', 'Rhythm'], mood: ['Energetic', 'Fun'], sessionLength: 'short', rewardPotential: 'medium', rewardFrequency: 'high', progression: 'medium', complexity: 'medium', storyline: false, description: 'Tap through music challenges in quick sessions.' },
+];
