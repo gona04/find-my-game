@@ -19,7 +19,7 @@ export const RecommendationCard = memo(({ recommendation, index }: Props) => {
     <Animated.View style={{ opacity, transform: [{ translateY }] }}>
       <View style={styles.card}>
         <Text style={styles.title}>{recommendation.title}</Text>
-        <Image source={{ uri: recommendation.imageUrl }} style={styles.image} />
+        <Image source={recommendation.imageUrl} style={styles.image} />
         <View style={styles.scoreRow}>
           <Text style={styles.rewardText}>{recommendation.rewardPotential} rewards</Text>
           <Text style={styles.scoreText}>Match {recommendation.score}</Text>

@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export type RewardPotential = 'low' | 'medium' | 'high';
 export type RewardFrequency = 'low' | 'medium' | 'high';
 export type Progression = 'low' | 'medium' | 'high';
@@ -16,5 +18,5 @@ export interface Game {
   progression: Progression;
   complexity: Complexity;
   description: string;
-  imageUrl: string;
+  imageUrl: ImageSourcePropType;
 }

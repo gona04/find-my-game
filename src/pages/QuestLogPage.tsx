@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { games } from '../data/games';
 
 const RewardCard = memo(({ title, subtitle, color }: { title: string; subtitle: string; color: string }) => (
@@ -11,10 +11,10 @@ const RewardCard = memo(({ title, subtitle, color }: { title: string; subtitle: 
   </View>
 ));
 
-const GameTile = memo(({ title, imageUrl, reward }: { title: string; imageUrl: string; reward: number }) => (
+const GameTile = memo(({ title, imageUrl, reward }: { title: string; imageUrl: ImageSourcePropType; reward: number }) => (
   <View style={styles.gameTile}>
     <Text numberOfLines={1} style={styles.gameTitle}>{title}</Text>
-    <Image source={{ uri: imageUrl }} style={styles.gameImage} />
+    <Image source={imageUrl} style={styles.gameImage} />
     <Text style={styles.rewardAmount}>{reward} 💎</Text>
     <View style={styles.progressTrack}><View style={styles.progressFill} /></View>
   </View>
@@ -57,7 +57,7 @@ export const QuestLogPage = () => {
         {recommendations.map((game) => (
           <View key={game.id} style={styles.wideCard}>
             <Text style={styles.wideTitle}>{game.title}</Text>
-            <Image source={{ uri: game.imageUrl }} style={styles.wideImage} />
+            <Image source={game.imageUrl} style={styles.wideImage} />
             <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Play and earn</Text></TouchableOpacity>
           </View>
         ))}
