@@ -1,24 +1,4 @@
 import { Game } from "../types/Game";
-import MonumentValley2Icon from "../../assets/icons/monument-valley-2.svg";
-import AdventureCapitalistIcon from "../../assets/icons/adventure-capitalist.svg";
-import PubgMobileIcon from "../../assets/icons/pubg-mobile.svg";
-import MobileLegendsIcon from "../../assets/icons/mobile-legends.svg";
-import GenshinImpactIcon from "../../assets/icons/genshin-impact.svg";
-import ClashOfClansIcon from "../../assets/icons/clash-of-clans.svg";
-import StardewValleyIcon from "../../assets/icons/stardew-valley.svg";
-import SubwaySurfersIcon from "../../assets/icons/subway-surfers.svg";
-import HearthstoneIcon from "../../assets/icons/hearthstone.svg";
-import BloonsTd6Icon from "../../assets/icons/bloons-td6.svg";
-import IdentityVIcon from "../../assets/icons/identity-v.svg";
-import FifaMobileIcon from "../../assets/icons/fifa-mobile.svg";
-import Asphalt9Icon from "../../assets/icons/asphalt-9.svg";
-import ArcheroIcon from "../../assets/icons/archero.svg";
-import CandyCrushIcon from "../../assets/icons/candy-crush.svg";
-import WordleIcon from "../../assets/icons/wordle.svg";
-import AltosOdysseyIcon from "../../assets/icons/altos-odyssey.svg";
-import HonkaiStarRailIcon from "../../assets/icons/honkai-star-rail.svg";
-import AmongUsIcon from "../../assets/icons/among-us.svg";
-import BeatSaberIcon from "../../assets/icons/beat-saber.svg";
 
 export const games: Game[] = [
   {
@@ -34,8 +14,7 @@ export const games: Game[] = [
     complexity: "easy",
     description:
       "Guide a mother (Ro) and her child through stunning M.C. Escher-inspired architecture — impossible structures where staircases loop and paths defy gravity. Rotate and shift monuments to create illusory pathways in this meditative puzzle game about parenthood and letting go.",
-    rewardTypes: ["Movie Ticket", "App Store Credit"],
-    imageUrl: MonumentValley2Icon,
+    imageUrl: require("../../assets/icons/resized-images/monument_valley_2.jpg")
   },
   {
     id: "2",
@@ -50,8 +29,7 @@ export const games: Game[] = [
     complexity: "easy",
     description:
       "Start with a humble lemonade stand and build a global business empire. Hire managers, automate profits, and watch your money multiply even when you're not playing.",
-    rewardTypes: ["Cash", "PayPal"],
-    imageUrl: AdventureCapitalistIcon,
+    imageUrl: require("../../assets/icons/resized-images/adventure_capitalist.png")
   },
   {
     id: "3",
@@ -66,8 +44,7 @@ export const games: Game[] = [
     complexity: "hard",
     description:
       "100 players parachute onto a shrinking island and fight to be the last one standing. Loot weapons, build strategy, and outlast everyone in this defining battle royale experience.",
-    rewardTypes: ["Cash", "Google Play Credit"],
-    imageUrl: PubgMobileIcon,
+    imageUrl: require("../../assets/icons/resized-images/pubg.jpg")
   },
   {
     id: "4",
@@ -82,8 +59,7 @@ export const games: Game[] = [
     complexity: "hard",
     description:
       "Two teams of five heroes clash in real-time 5v5 battles to destroy the enemy base. Pick from dozens of unique heroes, coordinate with teammates, and dominate the battlefield.",
-    rewardTypes: ["Google Play Credit", "Gift Card"],
-    imageUrl: MobileLegendsIcon,
+    imageUrl: require("../../assets/icons/resized-images/mobile_legends_bang_bang-long_hair-oriental-umbrella-965698.jpeg"),
   },
   {
     id: "5",
@@ -98,8 +74,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Explore the vast open world of Teyvat, a land where seven nations are each ruled by a different elemental god. Assemble a team of elemental heroes and uncover the mystery of your missing twin.",
-    rewardTypes: ["Google Play Credit", "Gift Card"],
-    imageUrl: GenshinImpactIcon,
+    imageUrl: require("../../assets/icons/resized-images/genshin_impact.png"),
   },
   {
     id: "6",
@@ -114,40 +89,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Build and defend your village, train an army, and raid other players' bases for resources. Join a clan, coordinate in war battles, and climb the global leaderboard.",
-    rewardTypes: ["Gift Card", "Google Play Credit"],
-    imageUrl: ClashOfClansIcon,
-  },
-  {
-    id: "20",
-    title: "Stardew Valley",
-    genres: ["Simulation", "RPG"],
-    mood: ["calm", "cozy", "nostalgic"],
-    rewardPotential: "medium",
-    rewardFrequency: "high",
-    sessionLength: "long",
-    storyline: true,
-    progression: "high",
-    complexity: "medium",
-    description:
-      "Inherit your grandfather's farm and escape city life to build a new one in the countryside. Grow crops, raise animals, mine for ore, and build relationships with the quirky locals of Pelican Town.",
-    rewardTypes: ["Mall Discount", "Gift Card"],
-    imageUrl: StardewValleyIcon,
-  },
-  {
-    id: "7",
-    title: "Subway Surfers",
-    genres: ["Runner", "Arcade"],
-    mood: ["energetic", "casual", "fun"],
-    rewardPotential: "medium",
-    rewardFrequency: "high",
-    sessionLength: "short",
-    storyline: false,
-    progression: "medium",
-    complexity: "easy",
-    description:
-      "Dash through colorful subway tracks while dodging trains, barriers, and an angry inspector. Swipe to switch lanes, collect coins, and rack up the highest score you can.",
-    rewardTypes: ["Amazon Coupon", "Google Play Credit"],
-    imageUrl: SubwaySurfersIcon,
+    imageUrl: require("../../assets/icons/resized-images/clash_of_clans.jpg"),
   },
   {
     id: "8",
@@ -162,8 +104,7 @@ export const games: Game[] = [
     complexity: "hard",
     description:
       "Build a deck of spells and minions and outmaneuver your opponent in turn-based card battles set in the Warcraft universe. Every match is a strategic puzzle with hundreds of cards to master.",
-    rewardTypes: ["Gift Card", "App Store Credit"],
-    imageUrl: HearthstoneIcon,
+    imageUrl: require("../../assets/icons/resized-images/heart_stone.jpg"),
   },
   {
     id: "9",
@@ -178,8 +119,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Place monkey towers along a path to pop waves of increasingly tough balloons before they reach your base. With dozens of tower types and upgrade paths, no two playthroughs feel the same.",
-    rewardTypes: ["Amazon Coupon", "Gift Card"],
-    imageUrl: BloonsTd6Icon,
+    imageUrl: require("../../assets/icons/resized-images/bloons_td_6.jpg"),
   },
   {
     id: "10",
@@ -194,8 +134,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Four survivors must decode ciphers and escape a gothic mansion while one hunter tracks them down. A dark asymmetric cat-and-mouse game wrapped in a Victorian mystery narrative.",
-    rewardTypes: ["Movie Ticket", "App Store Credit"],
-    imageUrl: IdentityVIcon,
+    imageUrl: require("../../assets/icons/resized-images/identity_V.png"),
   },
   {
     id: "11",
@@ -210,8 +149,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Build your ultimate football squad with real-world players and compete in live events, leagues, and head-to-head matches. Collect iconic player cards and climb the division ladder.",
-    rewardTypes: ["Amazon Coupon", "Gift Card"],
-    imageUrl: FifaMobileIcon,
+    imageUrl: require("../../assets/icons/resized-images/fifa_mobile.jpg"),
   },
   {
     id: "12",
@@ -226,8 +164,7 @@ export const games: Game[] = [
     complexity: "easy",
     description:
       "Race hyper-realistic supercars across stunning global tracks with one-tap control or manual driving. Pull off mid-air 360 barrel rolls, nitro boosts, and spectacular crashes in arcade-style races.",
-    rewardTypes: ["Cash", "Google Play Credit"],
-    imageUrl: Asphalt9Icon,
+    imageUrl: require("../../assets/icons/resized-images/asphalt_9_legends.jpg"),
   },
   {
     id: "13",
@@ -242,8 +179,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Navigate through procedurally generated dungeon rooms as a lone archer, stopping to shoot and moving to dodge. Collect random ability upgrades each level to create a unique build every run.",
-    rewardTypes: ["PayPal", "Google Play Credit"],
-    imageUrl: ArcheroIcon,
+    imageUrl: require("../../assets/icons/resized-images/archero.png"),
   },
   {
     id: "14",
@@ -258,24 +194,7 @@ export const games: Game[] = [
     complexity: "easy",
     description:
       "Swap and match colourful candies to complete hundreds of puzzles across a whimsical candy world. A perfect pick-up-and-play game for a few minutes of satisfying colour-matching fun.",
-    rewardTypes: ["Amazon Coupon", "Mall Discount"],
-    imageUrl: CandyCrushIcon,
-  },
-  {
-    id: "15",
-    title: "Wordle (NYT Games)",
-    genres: ["Word", "Puzzle"],
-    mood: ["calm", "focused", "satisfying"],
-    rewardPotential: "low",
-    rewardFrequency: "low",
-    sessionLength: "short",
-    storyline: false,
-    progression: "low",
-    complexity: "easy",
-    description:
-      "Guess a hidden five-letter word in six attempts. Each guess gives colour-coded clues to narrow down the answer. One puzzle a day — deceptively simple, deeply satisfying.",
-    rewardTypes: ["Mall Discount", "Movie Ticket"],
-    imageUrl: WordleIcon,
+    imageUrl: require("../../assets/icons/resized-images/candy_crush_saga.jpg"),
   },
   {
     id: "16",
@@ -290,8 +209,7 @@ export const games: Game[] = [
     complexity: "easy",
     description:
       "Snowboard through sweeping desert dunes, ancient temples, and hot air balloon-filled skies in this beautifully atmospheric endless runner. Complete goals and pull off trick combos as the world shifts around you.",
-    rewardTypes: ["Movie Ticket", "App Store Credit"],
-    imageUrl: AltosOdysseyIcon,
+    imageUrl: require("../../assets/icons/resized-images/altos_odyssey.jpg"),
   },
   {
     id: "17",
@@ -306,24 +224,7 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Board a space train called the Astral Express and travel across galaxies to uncover a universe-threatening mystery. A cinematic turn-based RPG with a deep roster of characters to collect and build.",
-    rewardTypes: ["Google Play Credit", "Gift Card"],
-    imageUrl: HonkaiStarRailIcon,
-  },
-  {
-    id: "18",
-    title: "Among Us",
-    genres: ["Social", "Party", "Deduction"],
-    mood: ["social", "fun", "tense"],
-    rewardPotential: "medium",
-    rewardFrequency: "medium",
-    sessionLength: "short",
-    storyline: false,
-    progression: "low",
-    complexity: "easy",
-    description:
-      "Complete tasks aboard a spaceship while hidden impostors sabotage the crew and eliminate players one by one. Use discussion and deduction to vote out the impostors before it's too late.",
-    rewardTypes: ["Movie Ticket", "Amazon Coupon"],
-    imageUrl: AmongUsIcon,
+    imageUrl: require("../../assets/icons/resized-images/honkai_star_rail.jpg"),
   },
   {
     id: "19",
@@ -338,7 +239,6 @@ export const games: Game[] = [
     complexity: "medium",
     description:
       "Slash flying beats in sync with the music using virtual lightsabers in augmented reality. Hit blocks on beat, dodge obstacles, and feel the rhythm flow through increasingly challenging tracks.",
-    rewardTypes: ["App Store Credit", "Gift Card"],
-    imageUrl: BeatSaberIcon,
+    imageUrl: require("../../assets/icons/resized-images/beat_saber.png"),
   },
 ];

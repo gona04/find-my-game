@@ -1,60 +1,153 @@
-import React, { memo, useEffect, useRef } from 'react';
-import { Animated, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { Recommendation } from '../../services/recommendationService';
+import React, { memo, useEffect, useRef } from "react";
+import { Animated, Platform, StyleSheet, Text, View } from "react-native";
+import { Recommendation } from "../../services/recommendationService";
+import { Image } from "react-native";
 
 type Props = { recommendation: Recommendation; index: number };
+
+const ARTWORK_HEIGHT = 180;
 
 export const RecommendationCard = memo(({ recommendation, index }: Props) => {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(30)).current;
-  const { width } = useWindowDimensions();
-  const GameIcon = recommendation.imageUrl;
-  const iconSize = Math.min(140, Math.max(96, width * 0.32));
+  // const GameIcon = recommendation.imageUrl;
 
   useEffect(() => {
     Animated.parallel([
-      Animated.timing(opacity, { toValue: 1, duration: 260, delay: index * 90, useNativeDriver: true }),
-      Animated.spring(translateY, { toValue: 0, delay: index * 90, useNativeDriver: true }),
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 260,
+        delay: index * 90,
+        useNativeDriver: true,
+      }),
+      Animated.spring(translateY, {
+        toValue: 0,
+        delay: index * 90,
+        useNativeDriver: true,
+      }),
     ]).start();
   }, [index, opacity, translateY]);
 
   return (
     <Animated.View style={{ opacity, transform: [{ translateY }] }}>
       <View style={styles.card}>
-        <Text style={styles.title}>{recommendation.title}</Text>
-        <View style={styles.image}>{GameIcon && <GameIcon width={iconSize} height={iconSize} />}</View>
-        <View style={styles.scoreRow}>
-          <Text style={styles.rewardText}>{recommendation.rewardPotential} rewards</Text>
-          <Text style={styles.scoreText}>Match {recommendation.score}</Text>
+        <View style={styles.artworkContainer}>
+          {/* {GameIcon ? (
+            <GameIcon width="100%" height={ARTWORK_HEIGHT} preserveAspectRatio="xMidYMid slice" />
+          ) : (
+            <View style={styles.artworkPlaceholder} />
+          )} */}
+          <Image
+            source={recommendation.imageUrl}
+            style={styles.artwork}
+            resizeMode="cover"
+          />
         </View>
-        <Text style={styles.description}>{recommendation.description}</Text>
-        <Text style={styles.meta}>Storyline: {recommendation.storyline ? 'Yes' : 'No'} • {recommendation.sessionLength} sessions • {recommendation.rewardPotential} reward potential</Text>
-        <View style={styles.rewardBadges}>{recommendation.rewardTypes.map((reward) => <Text key={reward} style={styles.rewardBadge}>{reward}</Text>)}</View>
-        <Text style={styles.reasonLine}>{recommendation.matchReason}</Text>
-        <View style={styles.tags}>
-          <Text style={styles.tag}>{recommendation.genres.join(' • ')}</Text>
-          <Text style={styles.tag}>{recommendation.sessionLength} sessions</Text>
-          <Text style={styles.tag}>{recommendation.progression} progression</Text>
+
+        <View style={styles.content}>
+          <View style={styles.titleRow}>
+            <Text style={styles.title}>{recommendation.title}</Text>
+            <Text style={styles.scoreBadge}>Match {recommendation.score}</Text>
+          </View>
+
+          <Text style={styles.gemLine}>
+            💎 {recommendation.rewardPotential} gem potential ·{" "}
+            {recommendation.rewardFrequency} frequency
+          </Text>
+
+          <Text style={styles.statsLine}>
+            📖 Storyline: {recommendation.storyline ? "Yes" : "No"} ⏱{" "}
+            {recommendation.sessionLength} sessions
+          </Text>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.whyLabel}>Why this?</Text>
+          <Text style={styles.whyText}>{recommendation.whyRecommended}</Text>
         </View>
-        <Text style={styles.whyTitle}>Why we recommended this</Text>
       </View>
     </Animated.View>
   );
 });
 
 const styles = StyleSheet.create({
-  card: { padding: 15, borderRadius: 16, backgroundColor: '#F7F7FB', marginBottom: 18, overflow: 'hidden' },
-  title: { fontSize: 18, fontWeight: 'bold', color: '#050505', marginBottom: 10, textAlign: 'center' },
-  image: { minHeight: 150, borderRadius: 12, marginBottom: 12, backgroundColor: '#E5E7EB', alignItems: 'center', justifyContent: 'center' },
-  scoreRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  rewardText: { fontSize: 18, fontWeight: 'bold', color: '#050505' },
-  scoreText: { fontSize: 15, fontWeight: 'bold', color: '#10B981' },
-  description: { color: '#4B5563', lineHeight: 20, marginBottom: 10 },
-  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 10 },
-  tag: { backgroundColor: '#fff', color: '#050505', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, fontWeight: '700', overflow: 'hidden' },
-  meta: { color: '#4B5563', fontWeight: '700', marginBottom: 8 },
-  rewardBadges: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
-  rewardBadge: { backgroundColor: '#E9FFD7', color: '#050505', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16, fontWeight: '800', overflow: 'hidden' },
-  reasonLine: { color: '#4B5563', fontStyle: 'italic', marginBottom: 10 },
-  whyTitle: { color: '#050505', fontWeight: 'bold', marginBottom: 6 },
+  card: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    overflow: "hidden",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: { elevation: 3 },
+      default: {},
+    }),
+  },
+  artworkContainer: {
+    width: "100%",
+    height: ARTWORK_HEIGHT,
+    overflow: "hidden",
+  },
+  // artworkPlaceholder: {
+  //   width: "100%",
+  //   height: ARTWORK_HEIGHT,
+  //   backgroundColor: "#E8E8E8",
+  // },
+  artwork: {
+    width: "100%",
+    height: ARTWORK_HEIGHT,
+},
+  content: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  title: {
+    flex: 1,
+    fontWeight: "700",
+    fontSize: 16,
+    color: "#1A1A2E",
+    marginRight: 8,
+  },
+  scoreBadge: {
+    color: "#6C63FF",
+    fontWeight: "600",
+    fontSize: 13,
+  },
+  gemLine: {
+    fontSize: 13,
+    color: "#444",
+    marginTop: 4,
+  },
+  statsLine: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 2,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#F0F0F0",
+    marginVertical: 8,
+  },
+  whyLabel: {
+    fontSize: 12,
+    fontStyle: "italic",
+    color: "#6B7280",
+    marginBottom: 2,
+  },
+  whyText: {
+    fontSize: 12,
+    fontStyle: "italic",
+    color: "#6B7280",
+    lineHeight: 18,
+  },
 });

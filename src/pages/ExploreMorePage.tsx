@@ -11,7 +11,7 @@ const placeholders = [
   'I only have 10 minutes...',
   'I want the highest rewards...',
 ];
-const suggestedSearches = ['Story adventure', 'Highest rewards', 'Quick puzzle', 'Relaxing idle', 'Competitive cards', 'Music rhythm'];
+// const suggestedSearches = ['Story adventure', 'Highest rewards', 'Quick puzzle', 'Relaxing idle', 'Competitive cards', 'Music rhythm'];
 const recentSearches = ['Cozy games before bed', 'Games with lots of gems', 'Short logic challenge'];
 
 export const ExploreMorePage = () => {
@@ -62,7 +62,7 @@ export const ExploreMorePage = () => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionHeader}>Suggested Searches</Text>
+       {/*  <Text style={styles.sectionHeader}>Suggested Searches</Text>
         <View style={styles.card}>
           <View style={styles.chips}>
             {suggestedSearches.map((chip) => (
@@ -71,7 +71,7 @@ export const ExploreMorePage = () => {
               </Pressable>
             ))}
           </View>
-        </View>
+        </View> */}
 
         <Text style={styles.sectionHeader}>Recent Searches</Text>
         <View style={styles.card}>

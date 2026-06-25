@@ -1,6 +1,11 @@
 import { gameDiscoveryActions, getGameDiscoveryStoreSnapshot } from '../useGameDiscoveryStore';
 
-jest.mock('../../services/llmService', () => ({ extractPreferences: jest.fn(async () => ({ genres:['RPG'] })) }));
+jest.mock('../../services/llmService', () => ({
+  extractPreferencesAndReasons: jest.fn(async () => ({
+    preferences: { genres: ['RPG'] },
+    reasons: { 'Genshin Impact': 'Why Genshin Impact fits you.' },
+  })),
+}));
 
 describe('useGameDiscoveryStore actions', () => {
   it('initial state is correct', () => { const s=getGameDiscoveryStoreSnapshot(); expect(s.query).toBe(''); expect(s.loading).toBe(false); });

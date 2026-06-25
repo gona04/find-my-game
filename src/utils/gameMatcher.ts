@@ -1,8 +1,8 @@
 import { games } from '../data/games';
-import { Game, RewardType } from '../types/Game';
+import { Game } from '../types/Game';
 
 export type RoutingPath = 'keyword' | 'llm' | null;
-export type GamePreferences = Partial<Pick<Game, 'sessionLength' | 'rewardPotential' | 'rewardFrequency' | 'progression' | 'complexity' | 'storyline' | 'rewardTypes'>> & {
+export type GamePreferences = Partial<Pick<Game, 'sessionLength' | 'rewardPotential' | 'rewardFrequency' | 'progression' | 'complexity' | 'storyline'>> & {
   genres?: string[];
   mood?: string[];
   semanticTerms?: string[];
@@ -18,8 +18,6 @@ const countSignals = (prefs: GamePreferences): number => Object.entries(prefs).r
   if (Array.isArray(value)) return total + value.length;
   return value === undefined ? total : total + 1;
 }, 0);
-
-const addRewardType = (prefs: GamePreferences, rewardType: RewardType): void => { prefs.rewardTypes = add(prefs.rewardTypes, rewardType); };
 
 export const extractKeywordPreferences = (query: string): GamePreferences => {
   const text = query.toLowerCase().trim();
@@ -43,15 +41,6 @@ export const extractKeywordPreferences = (query: string): GamePreferences => {
   if (includesAny(text, ['idle', 'build', 'slowly build', 'upgrade'])) prefs.genres = add(prefs.genres, 'Idle');
   if (includesAny(text, ['rpg', 'role playing', 'hero', 'loot'])) prefs.genres = add(prefs.genres, 'RPG');
 
-  if (text.includes('amazon')) addRewardType(prefs, 'Amazon Coupon');
-  if (includesAny(text, ['movie', 'cinema'])) addRewardType(prefs, 'Movie Ticket');
-  if (includesAny(text, ['mall', 'shopping'])) addRewardType(prefs, 'Mall Discount');
-  if (text.includes('gift card')) addRewardType(prefs, 'Gift Card');
-  if (includesAny(text, ['cash', 'money'])) addRewardType(prefs, 'Cash');
-  if (text.includes('paypal')) addRewardType(prefs, 'PayPal');
-  if (text.includes('google play')) addRewardType(prefs, 'Google Play Credit');
-  if (includesAny(text, ['app store', 'apple'])) addRewardType(prefs, 'App Store Credit');
-
   const referencedGame = games.find((game) => text.includes(game.title.toLowerCase()));
   if (referencedGame) prefs.referencedGame = referencedGame.title;
   return { ...prefs, matchedFields: countSignals(prefs) };
@@ -63,7 +52,7 @@ export const getCatalogMatchStrength = (query: string): number => {
   const terms = tokenize(query).filter((term) => term.length > 2);
   if (!terms.length) return 0;
   return Math.max(...games.map((game) => {
-    const haystack = [game.title, game.description, game.genres.join(' '), game.mood.join(' '), game.rewardTypes.join(' '), game.rewardPotential, game.rewardFrequency, game.sessionLength, game.progression, game.complexity, game.storyline ? 'story storyline narrative' : ''].join(' ').toLowerCase();
+    const haystack = [game.title, game.description, game.genres.join(' '), game.mood.join(' '), game.rewardPotential, game.rewardFrequency, game.sessionLength, game.progression, game.complexity, game.storyline ? 'story storyline narrative' : ''].join(' ').toLowerCase();
     return terms.reduce((score, term) => score + (haystack.includes(term) ? 1 : 0), 0);
   }));
 };

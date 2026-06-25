@@ -1,11 +1,12 @@
 import { useSyncExternalStore } from 'react';
-import { extractPreferences } from '../services/llmService';
-import { getRecommendations, Recommendation } from '../services/recommendationService';
+import { games } from '../data/games';
+import { extractPreferencesAndReasons } from '../services/llmService';
+import { getRecommendations } from '../services/recommendationService';
 import { extractKeywordPreferences, hasMeaningfulPreferences, RoutingPath } from '../utils/gameMatcher';
 
 type State = {
   query: string;
-  recommendations: Recommendation[];
+  recommendations: ReturnType<typeof getRecommendations>;
   loading: boolean;
   streamingStatus: string;
   error: string | null;
@@ -35,14 +36,22 @@ export const gameDiscoveryActions = {
     try {
       const keywordPreferences = extractKeywordPreferences(currentQuery);
       const routingPath: RoutingPath = hasMeaningfulPreferences(keywordPreferences, currentQuery) ? 'keyword' : 'llm';
-      const preferences = routingPath === 'keyword'
-        ? keywordPreferences
-        : await extractPreferences(currentQuery, (streamingStatus) => setState({ streamingStatus }));
-      const recommendations = getRecommendations(preferences);
+      let preferences = keywordPreferences;
+      let reasons: Record<string, string> = {};
+
+      if (routingPath === 'llm') {
+        setState({ streamingStatus: 'Understanding your vibe...' });
+        const result = await extractPreferencesAndReasons(currentQuery, games);
+        preferences = result.preferences;
+        reasons = result.reasons;
+        setState({ streamingStatus: 'Finding your matches...' });
+      }
+
+      const recommendations = getRecommendations(preferences, reasons);
       setState({ recommendations, routingPath, loading: false, streamingStatus: '', error: recommendations.length ? null : 'No matches found. Try describing a mood, genre, or session length.' });
     } catch (error) {
-      const fallback = getRecommendations({ mood: ['Relaxing'], rewardPotential: 'high' });
-      setState({ recommendations: fallback, routingPath: 'llm', loading: false, streamingStatus: '', error: error instanceof Error ? `${error.message} Showing fallback picks.` : 'AI search failed. Showing fallback picks.' });
+      const recommendations = getRecommendations({ mood: ['Relaxing'], rewardPotential: 'high' }, {});
+      setState({ recommendations, routingPath: 'llm', loading: false, streamingStatus: '', error: error instanceof Error ? `${error.message} Showing fallback picks.` : 'AI search failed. Showing fallback picks.' });
     }
   },
 };
