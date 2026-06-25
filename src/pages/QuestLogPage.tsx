@@ -1,5 +1,6 @@
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import React, { memo, useMemo } from 'react';
-import { Image, ImageSourcePropType, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SvgProps } from 'react-native-svg';
 import { games } from '../data/games';
 
 const RewardCard = memo(({ title, subtitle, color }: { title: string; subtitle: string; color: string }) => (
@@ -11,16 +12,21 @@ const RewardCard = memo(({ title, subtitle, color }: { title: string; subtitle: 
   </View>
 ));
 
-const GameTile = memo(({ title, imageUrl, reward }: { title: string; imageUrl: ImageSourcePropType; reward: number }) => (
+const GameTile = memo(({ title, imageUrl, reward }: { title: string; imageUrl: React.FC<SvgProps>; reward: number }) => {
+  const GameIcon = imageUrl;
+  return (
   <View style={styles.gameTile}>
     <Text numberOfLines={1} style={styles.gameTitle}>{title}</Text>
-    <Image source={imageUrl} style={styles.gameImage} />
+    <View style={styles.gameImage}>{GameIcon && <GameIcon width={110} height={110} />}</View>
     <Text style={styles.rewardAmount}>{reward} 💎</Text>
     <View style={styles.progressTrack}><View style={styles.progressFill} /></View>
   </View>
-));
+);
+});
 
-export const QuestLogPage = () => {
+export const QuestLogPage = (): React.ReactElement => {
+  const { width } = useWindowDimensions();
+  const wideIconSize = Math.min(150, width * 0.36);
   const keepPlaying = useMemo(() => games.slice(0, 3), []);
   const recommendations = useMemo(() => games.slice(3, 6), []);
 
@@ -57,7 +63,7 @@ export const QuestLogPage = () => {
         {recommendations.map((game) => (
           <View key={game.id} style={styles.wideCard}>
             <Text style={styles.wideTitle}>{game.title}</Text>
-            <Image source={game.imageUrl} style={styles.wideImage} />
+            <View style={styles.wideImage}>{(() => { const GameIcon = game.imageUrl; return GameIcon ? <GameIcon width={wideIconSize} height={wideIconSize} /> : null; })()}</View>
             <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>Play and earn</Text></TouchableOpacity>
           </View>
         ))}
@@ -89,13 +95,13 @@ const styles = StyleSheet.create({
   seeAll: { fontWeight: 'bold', fontSize: 15 },
   gameTile: { width: 210, borderRadius: 16, backgroundColor: '#F7F7FB', overflow: 'hidden', borderWidth: 1, borderColor: '#E8E8EF' },
   gameTitle: { fontSize: 16, fontWeight: 'bold', padding: 10 },
-  gameImage: { height: 120, width: '100%' },
+  gameImage: { height: 120, width: '100%', alignItems: 'center', justifyContent: 'center' },
   rewardAmount: { fontSize: 22, fontWeight: 'bold', paddingHorizontal: 14, paddingTop: 10 },
   progressTrack: { height: 4, backgroundColor: '#D8D8E0', margin: 14, borderRadius: 4 },
   progressFill: { height: 4, width: '44%', backgroundColor: '#050505', borderRadius: 4 },
   wideCard: { padding: 15, borderRadius: 16, backgroundColor: '#F7F7FB', marginBottom: 20, overflow: 'hidden' },
   wideTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
-  wideImage: { height: 160, borderRadius: 12, marginBottom: 10 },
+  wideImage: { minHeight: 160, borderRadius: 12, marginBottom: 10, alignItems: 'center', justifyContent: 'center' },
   button: { marginTop: 10, backgroundColor: '#fff', padding: 8, alignItems: 'center', borderRadius: 8 },
   buttonText: { fontWeight: 'bold' },
 });

@@ -22,9 +22,10 @@ let state: State = { query: '', recommendations: [], loading: false, streamingSt
 const listeners = new Set<() => void>();
 const setState = (patch: Partial<State>) => { state = { ...state, ...patch }; listeners.forEach((listener) => listener()); };
 const subscribe = (listener: () => void) => { listeners.add(listener); return () => listeners.delete(listener); };
-const getSnapshot = () => state;
+const getSnapshot = (): State => state;
+export const getGameDiscoveryStoreSnapshot = (): State => state;
 
-const actions = {
+export const gameDiscoveryActions = {
   setQuery: (query: string) => setState({ query }),
   clearResults: () => setState({ recommendations: [], error: null, routingPath: null, streamingStatus: '' }),
   searchGames: async (queryOverride?: string) => {
@@ -46,4 +47,4 @@ const actions = {
   },
 };
 
-export const useGameDiscoveryStore = (): Store => ({ ...useSyncExternalStore(subscribe, getSnapshot, getSnapshot), ...actions });
+export const useGameDiscoveryStore = (): Store => ({ ...useSyncExternalStore(subscribe, getSnapshot, getSnapshot), ...gameDiscoveryActions });

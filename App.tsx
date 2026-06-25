@@ -1,11 +1,13 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { BottomTabs } from './src/app/navigation/BottomTabs';
 
-export default function App() {
+export default function App(): React.ReactElement {
   return (
-    <>
+    <SafeAreaProvider>
       <BottomTabs />
       <StatusBar style="dark" />
-    </>
+    </SafeAreaProvider>
   );
 }
