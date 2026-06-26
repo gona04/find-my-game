@@ -6,21 +6,23 @@ import {
   View,
 } from "react-native";
 import { SearchCardProps } from "../../types/SearchCardProps";
+import { colors } from "../../theme/colors";
+import { spacingSize, fontSizes } from "../../theme/spacing";
 
 export const SearchCard = ({
   query,
   placeholder,
   loading,
-  onChangeText,
+  onQueryChange,
   onSearch,
 }: SearchCardProps) => {
   return (
     <View style={styles.card}>
       <TextInput
         value={query}
-        onChangeText={onChangeText}
+        onChangeText={onQueryChange}
         placeholder={placeholder}
-        placeholderTextColor="#8B8B96"
+        placeholderTextColor={colors.grey}
         multiline
         style={styles.input}
         textAlignVertical="top"
@@ -41,27 +43,31 @@ export const SearchCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    padding: 15,
-    borderRadius: 16,
-    backgroundColor: "#F7F7FB",
-    marginBottom: 22,
+    padding: spacingSize.ss_15,
+    borderRadius: spacingSize.ss_16,
+    backgroundColor: colors.primaryLight,
+    marginBottom: spacingSize.ss_22,
   },
   input: {
     minHeight: 92,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 12,
-    color: "#050505",
-    fontSize: 16,
-    marginBottom: 10,
+    backgroundColor: colors.surface,
+    borderRadius: spacingSize.ss_12,
+    padding: spacingSize.ss_12,
+    color: colors.blackShadeOne,
+    fontSize: fontSizes.fs_16,
+    marginBottom: spacingSize.ss_10,
   },
   primaryButton: {
-    marginTop: 10,
-    backgroundColor: "#050505",
-    padding: 14,
+    marginTop: spacingSize.ss_10,
+    backgroundColor: colors.blackShadeOne,
+    paddingVertical: spacingSize.ss_14,
     alignItems: "center",
-    borderRadius: 24,
+    borderRadius: spacingSize.ss_24 ?? 24,
   },
-  primaryButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  primaryButtonText: {
+    color: colors.surface,
+    fontWeight: "bold",
+    fontSize: fontSizes.fs_16,
+  },
   disabledButton: { opacity: 0.7 },
 });
