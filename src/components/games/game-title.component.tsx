@@ -1,7 +1,6 @@
 import { memo } from "react";
 import {
   Image,
-  ImageSourcePropType,
   StyleSheet,
   Text,
   View,
