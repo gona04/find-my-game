@@ -46,8 +46,9 @@ const styles = StyleSheet.create({
   },
   emptyImage: {
     height: 130,
-    borderRadius: spacingSize.ss_12,
-    marginBottom: spacingSize.ss_12,
+    width:-200,
+    borderRadius: 0,
+    marginBottom: 0,
   },
   emptyTitle: {
     fontSize: fontSizes.fs_18,

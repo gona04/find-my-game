@@ -21,6 +21,7 @@ You must return a single JSON object with exactly two keys:
     // storyline?: boolean
     // progression?: "low" | "medium" | "high"
     // complexity?: "low" | "medium" | "high"
+    // description: 'string'
   },
   "reasons": {
     // For each game title in the catalog, write ONE sentence (max 120 chars)
@@ -57,6 +58,7 @@ export const extractPreferencesAndReasons = async (
   if (!apiKey) return emptyResult();
 
   try {
+    console.log(catalog);
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
