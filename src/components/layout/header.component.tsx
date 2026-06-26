@@ -2,10 +2,10 @@ import { View, Text, StyleSheet } from "react-native"
 import { fontSizes, spacingSize } from "../../theme/spacing"
 import { colors } from "../../theme/colors"
 
-export const Header = () => {
+export const Header = ({title}:{title:string}) => {
     return (
                 <View style={styles.header}>
-                  <Text style={styles.title}>Quest Log</Text>
+                  <Text style={styles.title}>{title}</Text>
                   <Text style={styles.gemCount}>1770 💎</Text>
                 </View>
     )

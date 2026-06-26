@@ -5,11 +5,15 @@ import { WideGameCard } from "../components/wildCard/wild-card.component";
 import { RewardCard } from "../components/rewards/reward-card.component";
 import { rewardCards } from "../data/rewardCard";
 import { Header } from "../components/layout/header.component";
-import { ClaimedBanner } from "../components/layout/claimed-banner.component";
+import {
+  BannerCard,
+} from "../components/common/banner-card.component";
 import { HorizontalScroll } from "../components/common/horizontal-scope.component";
 import { AppScreen } from "../components/layout/app-screen.component";
 import { SectionHeading } from "../components/common/section-heading.component";
 import { CardList } from "../components/common/card-list.component";
+import { colors } from "../theme/colors";
+import { Text } from "react-native";
 
 export const QuestLogPage = (): React.ReactElement => {
   const keepPlaying = useMemo(() => games.slice(0, 3), []);
@@ -17,9 +21,14 @@ export const QuestLogPage = (): React.ReactElement => {
 
   return (
     <AppScreen>
-      <Header />
+      <Header title="Quest Log" />
 
-      <ClaimedBanner />
+      <BannerCard
+        backgroundColor={colors.yellow}
+        icon={<Text style={{ color: colors.green, fontSize: 28 }}>✓</Text>}
+        title="All done! Come back tomorrow!"
+        subtitle="Claimed"
+      />
 
       <SectionHeading title="Extra Rewards" />
       <HorizontalScroll data={rewardCards} Component={RewardCard} />
