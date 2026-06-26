@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react-native';
-import { RecommendationCard } from '../recommendations/RecommendationCard';
+import { RecommendationCard } from '../recommendations/recomendations-card.component';
 import { Recommendation } from '../../services/recommendationService';
 
 const recommendation: Recommendation = {
@@ -15,6 +15,8 @@ const recommendation: Recommendation = {
   complexity: 'easy',
   description: 'Fun',
   imageUrl: require("../../../assets/icons/resized-images/pubg.jpg"),
+  totalGems: 100,
+  perTaskGems: 10,
   score: 12,
   matchReason: 'Matched on: Puzzle genre',
   whyRecommended: 'Similar adventure gameplay to your query with calm puzzle sessions.',

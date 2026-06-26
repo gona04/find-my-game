@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, memo } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { colors } from '../../constants/colors';
-import { spacing } from '../../constants/spacing';
+import { colors } from '../../theme/colors';
+import { spacing } from '../../theme/spacing';
 
 type Props = PropsWithChildren<{ style?: StyleProp<ViewStyle> }>;
 export const Card = memo(({ children, style }: Props) => <View style={[styles.card, style]}>{children}</View>);

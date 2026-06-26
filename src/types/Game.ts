@@ -21,6 +21,8 @@ export interface Game {
   complexity: Complexity;
   description: string;
   imageUrl: ImageSourcePropType;
+  totalGems: number;
+  perTaskGems: number;
 }
 
 export type ExtractedPreferences = Partial<Pick<Game,

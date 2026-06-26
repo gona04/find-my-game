@@ -1,7 +1,8 @@
 import React, { memo, useCallback, useState } from 'react';
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { QuestLogPage } from '../../pages/QuestLogPage';
 import { ExploreMorePage } from '../../pages/ExploreMorePage';
+import { spacingSize } from '../../theme/spacing';
 
 type Tab = 'Quest Log' | 'Explore More';
 type IconProps = { active: boolean };
@@ -30,8 +31,16 @@ export const BottomTabs = () => {
   const exploreActive = tab === 'Explore More';
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.screen}>{questActive ? <QuestLogPage /> : <ExploreMorePage />}</View>
+    <>
+     <View style={styles.safeArea}>
+            <ScrollView
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.screen}>{questActive ? <QuestLogPage /> : <ExploreMorePage />}</View>
+            </ScrollView>
+            
+            </View>
       <View style={styles.tabs}>
         <Pressable onPress={showQuestLog} style={styles.tab}>
           <ScrollText active={questActive} />
@@ -42,11 +51,12 @@ export const BottomTabs = () => {
           <Text style={[styles.label, exploreActive && styles.activeLabel]}>Explore More</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+    scrollContent: { paddingHorizontal: spacingSize.ss_10, paddingTop: spacingSize.ss_24, paddingBottom: spacingSize.ss_20 },
   safeArea: { flex: 1, backgroundColor: '#fff' },
   screen: { flex: 1 },
   tabs: {

@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
-import { colors } from '../../constants/colors';
-import { spacing } from '../../constants/spacing';
+import { colors } from '../../theme/colors';
+import { spacing } from '../../theme/spacing';
 
 type Props = { title: string; onPress: () => void; loading?: boolean; disabled?: boolean };
 export const Button = memo(({ title, onPress, loading, disabled }: Props) => (

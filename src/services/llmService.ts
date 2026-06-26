@@ -63,7 +63,7 @@ export const extractPreferencesAndReasons = async (
       body: JSON.stringify({
         model: 'deepseek-chat',
         stream: true,
-        temperature: 0.2,
+        temperature: 0.1,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: buildUserMessage(query, catalog) },

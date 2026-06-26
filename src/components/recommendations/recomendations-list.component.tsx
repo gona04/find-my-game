@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { FlatList, ListRenderItem, StyleSheet, Text } from 'react-native';
 import { Recommendation } from '../../services/recommendationService';
-import { RecommendationCard } from './RecommendationCard';
+import { RecommendationCard } from './recomendations-card.component';
 
 type Props = { recommendations: Recommendation[] };
 

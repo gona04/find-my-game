@@ -12,7 +12,8 @@ export const games: Game[] = [
     storyline: true,
     progression: "medium",
     complexity: "easy",
-    
+    totalGems: 225,
+    perTaskGems: 18,
     description:
       "Guide a mother (Ro) and her child through stunning M.C. Escher-inspired architecture — impossible structures where staircases loop and paths defy gravity. Rotate and shift monuments to create illusory pathways in this meditative puzzle game about parenthood and letting go.",
     imageUrl: require("../../assets/icons/resized-images/monument_valley_2.jpg")
@@ -28,6 +29,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "easy",
+    totalGems: 4000,
+    perTaskGems: 33,
     description:
       "Start with a humble lemonade stand and build a global business empire. Hire managers, automate profits, and watch your money multiply even when you're not playing.",
     imageUrl: require("../../assets/icons/resized-images/adventure_capitalist.png")
@@ -43,6 +46,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "medium",
     complexity: "hard",
+    totalGems: 338,
+    perTaskGems: 20,
     description:
       "100 players parachute onto a shrinking island and fight to be the last one standing. Loot weapons, build strategy, and outlast everyone in this defining battle royale experience.",
     imageUrl: require("../../assets/icons/resized-images/pubg.jpg")
@@ -58,6 +63,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "hard",
+    totalGems: 900,
+    perTaskGems: 20,
     description:
       "Two teams of five heroes clash in real-time 5v5 battles to destroy the enemy base. Pick from dozens of unique heroes, coordinate with teammates, and dominate the battlefield.",
     imageUrl: require("../../assets/icons/resized-images/mobile_legends_bang_bang-long_hair-oriental-umbrella-965698.jpeg"),
@@ -73,6 +80,8 @@ export const games: Game[] = [
     storyline: true,
     progression: "high",
     complexity: "medium",
+    totalGems: 2000,
+    perTaskGems: 20,
     description:
       "Explore the vast open world of Teyvat, a land where seven nations are each ruled by a different elemental god. Assemble a team of elemental heroes and uncover the mystery of your missing twin.",
     imageUrl: require("../../assets/icons/resized-images/genshin_impact.png"),
@@ -88,6 +97,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "medium",
+        totalGems: 3520,
+    perTaskGems: 20,
     description:
       "Build and defend your village, train an army, and raid other players' bases for resources. Join a clan, coordinate in war battles, and climb the global leaderboard.",
     imageUrl: require("../../assets/icons/resized-images/clash_of_clans.jpg"),
@@ -103,6 +114,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "hard",
+    totalGems: 2576,
+    perTaskGems: 20,
     description:
       "Build a deck of spells and minions and outmaneuver your opponent in turn-based card battles set in the Warcraft universe. Every match is a strategic puzzle with hundreds of cards to master.",
     imageUrl: require("../../assets/icons/resized-images/heart_stone.jpg"),
@@ -118,6 +131,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "medium",
+    totalGems: 4544,
+    perTaskGems: 20,
     description:
       "Place monkey towers along a path to pop waves of increasingly tough balloons before they reach your base. With dozens of tower types and upgrade paths, no two playthroughs feel the same.",
     imageUrl: require("../../assets/icons/resized-images/bloons_td_6.jpg"),
@@ -133,6 +148,8 @@ export const games: Game[] = [
     storyline: true,
     progression: "medium",
     complexity: "medium",
+    totalGems: 2300,
+    perTaskGems: 9,
     description:
       "Four survivors must decode ciphers and escape a gothic mansion while one hunter tracks them down. A dark asymmetric cat-and-mouse game wrapped in a Victorian mystery narrative.",
     imageUrl: require("../../assets/icons/resized-images/identity_V.png"),
@@ -148,6 +165,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "medium",
+    totalGems: 780,
+    perTaskGems: 17,
     description:
       "Build your ultimate football squad with real-world players and compete in live events, leagues, and head-to-head matches. Collect iconic player cards and climb the division ladder.",
     imageUrl: require("../../assets/icons/resized-images/fifa_mobile.jpg"),
@@ -163,6 +182,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "easy",
+    totalGems: 2300,
+    perTaskGems: 15,
     description:
       "Race hyper-realistic supercars across stunning global tracks with one-tap control or manual driving. Pull off mid-air 360 barrel rolls, nitro boosts, and spectacular crashes in arcade-style races.",
     imageUrl: require("../../assets/icons/resized-images/asphalt_9_legends.jpg"),
@@ -178,6 +199,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "medium",
     complexity: "medium",
+    totalGems: 553,
+    perTaskGems: 5,
     description:
       "Navigate through procedurally generated dungeon rooms as a lone archer, stopping to shoot and moving to dodge. Collect random ability upgrades each level to create a unique build every run.",
     imageUrl: require("../../assets/icons/resized-images/archero.png"),
@@ -193,6 +216,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "high",
     complexity: "easy",
+    totalGems: 600,
+    perTaskGems: 10,
     description:
       "Swap and match colourful candies to complete hundreds of puzzles across a whimsical candy world. A perfect pick-up-and-play game for a few minutes of satisfying colour-matching fun.",
     imageUrl: require("../../assets/icons/resized-images/candy_crush_saga.jpg"),
@@ -208,6 +233,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "medium",
     complexity: "easy",
+    totalGems: 580,
+    perTaskGems: 10,
     description:
       "Snowboard through sweeping desert dunes, ancient temples, and hot air balloon-filled skies in this beautifully atmospheric endless runner. Complete goals and pull off trick combos as the world shifts around you.",
     imageUrl: require("../../assets/icons/resized-images/altos_odyssey.jpg"),
@@ -223,6 +250,8 @@ export const games: Game[] = [
     storyline: true,
     progression: "high",
     complexity: "medium",
+    totalGems: 4590,
+    perTaskGems: 30,
     description:
       "Board a space train called the Astral Express and travel across galaxies to uncover a universe-threatening mystery. A cinematic turn-based RPG with a deep roster of characters to collect and build.",
     imageUrl: require("../../assets/icons/resized-images/honkai_star_rail.jpg"),
@@ -238,6 +267,8 @@ export const games: Game[] = [
     storyline: false,
     progression: "medium",
     complexity: "medium",
+    totalGems: 923,
+    perTaskGems: 20,
     description:
       "Slash flying beats in sync with the music using virtual lightsabers in augmented reality. Hit blocks on beat, dodge obstacles, and feel the rhythm flow through increasingly challenging tracks.",
     imageUrl: require("../../assets/icons/resized-images/beat_saber.png"),

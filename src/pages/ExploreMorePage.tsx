@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { RecommendationList } from '../components/recommendations/RecommendationList';
-import { StreamingIndicator } from '../components/recommendations/StreamingIndicator';
+import { RecommendationList } from '../components/recommendations/recomendations-list.component';
+import { StreamingIndicator } from '../components/recommendations/recomendations-streaming.component';
 import { useGameSearch } from '../hooks/useGameSearch';
 
 const placeholders = [
