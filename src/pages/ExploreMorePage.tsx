@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RecommendationList } from '../components/recommendations/RecommendationList';
 import { StreamingIndicator } from '../components/recommendations/StreamingIndicator';
 import { useGameSearch } from '../hooks/useGameSearch';
@@ -11,7 +11,7 @@ const placeholders = [
   'I only have 10 minutes...',
   'I want the highest rewards...',
 ];
-// const suggestedSearches = ['Story adventure', 'Highest rewards', 'Quick puzzle', 'Relaxing idle', 'Competitive cards', 'Music rhythm'];
+
 const recentSearches = ['Cozy games before bed', 'Games with lots of gems', 'Short logic challenge'];
 
 export const ExploreMorePage = () => {
@@ -62,17 +62,6 @@ export const ExploreMorePage = () => {
           </TouchableOpacity>
         </View>
 
-       {/*  <Text style={styles.sectionHeader}>Suggested Searches</Text>
-        <View style={styles.card}>
-          <View style={styles.chips}>
-            {suggestedSearches.map((chip) => (
-              <Pressable key={chip} onPress={() => runSuggestedSearch(chip)} style={styles.chip}>
-                <Text style={styles.chipText}>{chip}</Text>
-              </Pressable>
-            ))}
-          </View>
-        </View> */}
-
         <Text style={styles.sectionHeader}>Recent Searches</Text>
         <View style={styles.card}>
           {recentSearches.map((search) => (
@@ -104,7 +93,7 @@ export const ExploreMorePage = () => {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#fff' },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 25, paddingBottom: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, alignItems: 'center' },
   title: { fontSize: 24, fontWeight: 'bold', color: '#050505' },
   gemCount: { fontSize: 22, fontWeight: 'bold', color: '#050505' },

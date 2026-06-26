@@ -61,27 +61,22 @@ const GameTile = memo(
     totalGems: number;
     perTaskGems: number;
   }) => {
-    // const GameIcon = imageUrl;
     return (
       <View style={styles.gameTile}>
         <Text numberOfLines={1} style={styles.gameTitle}>
           {title}
         </Text>
         <View style={styles.gameImage}>
-          {/* {GameIcon ? (
-          <GameIcon width="100%" height={DISCOVER_ARTWORK_HEIGHT} preserveAspectRatio="xMidYMid slice" />
-        ) : (
-          <View style={styles.gameImagePlaceholder} />
-        )} */}
           <Image
             source={imageUrl}
             style={styles.gameArtwork}
             resizeMode="cover"
           />
         </View>
-        <Text style={styles.gemStats}>
-          ≈{totalGems} 💎 total | ≈{perTaskGems} per task
-        </Text>
+        <View style={styles.gemStatsRow}>
+          <Text style={styles.genStat}> {perTaskGems} 💎 </Text> 
+          <Text style={styles.genStat}>{totalGems} 💎</Text>
+        </View>
         <View style={styles.progressTrack}>
           <View style={styles.progressFill} />
         </View>
@@ -91,17 +86,13 @@ const GameTile = memo(
 );
 
 const WideGameCard = memo(
-  ({ title, imageUrl }: { title: string; imageUrl: ImageSourcePropType }) => {
+  ({ title, imageUrl, totalGems, perTaskGems }: { title: string; imageUrl: ImageSourcePropType; totalGems: number;
+    perTaskGems: number; }) => {
     const GameIcon = imageUrl;
     return (
       <View style={styles.wideCard}>
         <Text style={styles.wideTitle}>{title}</Text>
         <View style={styles.wideImage}>
-          {/* {GameIcon ? (
-          <GameIcon width="100%" height={DISCOVER_ARTWORK_HEIGHT} preserveAspectRatio="xMidYMid slice" />
-        ) : (
-          <View style={styles.wideImagePlaceholder} />
-        )} */}
           <Image
             source={imageUrl}
             style={styles.wideImagePlaceholder}
@@ -110,6 +101,10 @@ const WideGameCard = memo(
         </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Play and earn</Text>
+          <View>
+            <Text>≈{totalGems} 💎 total | ≈{perTaskGems} per task</Text>
+          </View>
+          
         </TouchableOpacity>
       </View>
     );
@@ -218,7 +213,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   safeArea: { flex: 1, backgroundColor: "#fff" },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
+  scrollContent: { paddingHorizontal: 10, paddingTop: 25, paddingBottom: 20 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -311,23 +306,25 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
   },
-  // gameImage: {
-  //   height: DISCOVER_ARTWORK_HEIGHT,
-  //   width: "100%",
-  //   overflow: "hidden",
-  // },
   gameImagePlaceholder: {
     height: DISCOVER_ARTWORK_HEIGHT,
     width: "100%",
     backgroundColor: "#E8E8E8",
   },
-  gemStats: {
+  gemStatsRow: {
     fontSize: 14,
     fontWeight: "600",
     paddingHorizontal: 14,
     paddingVertical: 10,
-    textAlign: "center",
     color: "#050505",
+    flexDirection:"row",
+    alignItems:"center",
+    justifyContent:"space-between"
+  },
+  genStat:{
+      fontSize: 14,
+  fontWeight: "700",
+  color: "#050505",
   },
   progressTrack: {
     height: 4,

@@ -10,7 +10,6 @@ const ARTWORK_HEIGHT = 180;
 export const RecommendationCard = memo(({ recommendation, index }: Props) => {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(30)).current;
-  // const GameIcon = recommendation.imageUrl;
 
   useEffect(() => {
     Animated.parallel([
@@ -32,11 +31,6 @@ export const RecommendationCard = memo(({ recommendation, index }: Props) => {
     <Animated.View style={{ opacity, transform: [{ translateY }] }}>
       <View style={styles.card}>
         <View style={styles.artworkContainer}>
-          {/* {GameIcon ? (
-            <GameIcon width="100%" height={ARTWORK_HEIGHT} preserveAspectRatio="xMidYMid slice" />
-          ) : (
-            <View style={styles.artworkPlaceholder} />
-          )} */}
           <Image
             source={recommendation.imageUrl}
             style={styles.artwork}
@@ -93,11 +87,6 @@ const styles = StyleSheet.create({
     height: ARTWORK_HEIGHT,
     overflow: "hidden",
   },
-  // artworkPlaceholder: {
-  //   width: "100%",
-  //   height: ARTWORK_HEIGHT,
-  //   backgroundColor: "#E8E8E8",
-  // },
   artwork: {
     width: "100%",
     height: ARTWORK_HEIGHT,

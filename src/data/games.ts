@@ -12,6 +12,7 @@ export const games: Game[] = [
     storyline: true,
     progression: "medium",
     complexity: "easy",
+    
     description:
       "Guide a mother (Ro) and her child through stunning M.C. Escher-inspired architecture — impossible structures where staircases loop and paths defy gravity. Rotate and shift monuments to create illusory pathways in this meditative puzzle game about parenthood and letting go.",
     imageUrl: require("../../assets/icons/resized-images/monument_valley_2.jpg")
