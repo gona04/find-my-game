@@ -1,2 +1,2 @@
-export * from './llmService';
-export * from './recommendationService';
+export * from './llm.service';
+export * from './recommendation.service';

@@ -23,7 +23,7 @@ export function ExploreMoreScreen() {
   } = useExploreMore();
 
   return (
-    <AppScreen>
+    <>
 
       <BannerCard
         backgroundColor={colors.green}
@@ -48,6 +48,6 @@ export function ExploreMoreScreen() {
 
       <RecommendationStatus loading={loading} routingPath={routingPath} error={error} />
       <RecommendationSection recommendations={recommendations} />
-    </AppScreen>
+    </>
   );
 }

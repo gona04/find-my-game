@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingHorizontal: spacingSize.ss_5,
+    paddingHorizontal: 0,
     paddingTop: spacingSize.ss_24,
     paddingBottom: spacingSize.ss_20,
   },

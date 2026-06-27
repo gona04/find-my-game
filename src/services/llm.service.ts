@@ -1,5 +1,6 @@
 import { games } from '../data/games';
 import { ExtractedPreferences, Game } from '../types/Game';
+import { SerperGameContext } from './serper.survice';
 
 const endpoint = 'https://api.deepseek.com/v1/chat/completions';
 
@@ -84,7 +85,6 @@ Rules:
 * No markdown.
 * No explanation.
 * No code fences.
-* Use exact game titles from the provided catalog as keys in the 'reasons' object.
 `;
 
 const buildUserMessage = (query: string, catalog: Game[]): string => `User query: "${query}"
@@ -100,11 +100,20 @@ const emptyResult = (): { preferences: ExtractedPreferences; reasons: Record<str
 export const extractPreferencesAndReasons = async (
   query: string,
   catalog: Game[] = games,
+  serperContext?: SerperGameContext,
 ): Promise<{ preferences: ExtractedPreferences; reasons: Record<string, string> }> => {
   const apiKey = process.env.EXPO_PUBLIC_DEEPSEEK_API_KEY;
   if (!apiKey) return emptyResult();
 
   try {
+    const serperBlock = serperContext
+      ? `\nSERP research context (from web search about the user's query):
+Reference game/topic: ${serperContext.referenceTitle ?? 'N/A'}
+Inferred genres: ${serperContext.inferredGenres.join(', ') || 'none'}
+Inferred mood: ${serperContext.inferredMood.join(', ') || 'none'}
+Web context summary: ${serperContext.contextSummary}
+Use this to improve your preference extraction and game matching.\n`
+      : '';
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -114,7 +123,7 @@ export const extractPreferencesAndReasons = async (
         temperature: 0.1,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: buildUserMessage(query, catalog) },
+          { role: 'user', content: serperBlock + buildUserMessage(query, catalog,) },
         ],
       }),
     });
@@ -140,28 +149,9 @@ export const extractPreferencesAndReasons = async (
     if (!json) return emptyResult();
 
     const parsed = JSON.parse(json) as { preferences?: ExtractedPreferences; reasons?: Record<string, string> };
-
-    // Sanitize reasons: ignore very short or offensive reasons so UI falls back to algorithmic matchReason.
-    const banned = /\b(stupid|stupidly|dumb|idiot|idiotic|moron|sucks|terrible|awful|foul|offensive|insult)\b/i;
-    const rawReasons = parsed.reasons ?? {};
-    const sanitized: Record<string, string> = {};
-    Object.entries(rawReasons).forEach(([title, reason]) => {
-      if (!reason || typeof reason !== 'string') {
-        return;
-      }
-      const tokens = reason.trim().split(/\s+/);
-      if (tokens.length < 3) {
-        return;
-      }
-      if (banned.test(reason)) {
-        return;
-      }
-      sanitized[title] = reason.trim();
-    });
-
     return {
       preferences: parsed.preferences ?? {},
-      reasons: sanitized,
+      reasons: parsed.reasons ?? {},
     };
   } catch {
     return emptyResult();

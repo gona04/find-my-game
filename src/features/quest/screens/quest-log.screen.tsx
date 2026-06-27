@@ -14,7 +14,7 @@ export function QuestLogScreen(): React.ReactElement {
   const recommendations = useMemo(() => games.slice(3, 6), []);
 
   return (
-    <AppScreen>
+    <>
 
       <BannerCard
         backgroundColor={colors.yellow}
@@ -31,6 +31,6 @@ export function QuestLogScreen(): React.ReactElement {
 
       <SectionHeading title="Recommended For You" />
       <CardList data={recommendations} Component={WideGameCard} />
-    </AppScreen>
+    </>
   );
 }

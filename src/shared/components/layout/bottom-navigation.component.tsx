@@ -59,7 +59,7 @@ export const BottomTabs = () => {
 };
 
 const styles = StyleSheet.create({
-scrollContent: { paddingHorizontal: spacingSize.ss_5, paddingTop: spacingSize.ss_5, paddingBottom: spacingSize.ss_5 },
+scrollContent: { paddingHorizontal:0, paddingTop: spacingSize.ss_5, paddingBottom: spacingSize.ss_5 },
   safeArea: { flex: 1, backgroundColor:colors.surface, paddingHorizontal: spacingSize.ss_15, marginTop:65, paddingBottom: spacingSize.ss_5 },
   screen: { flex: 1 },
   tabs: {

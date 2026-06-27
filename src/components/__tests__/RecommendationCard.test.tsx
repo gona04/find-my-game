@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react-native';
-import { RecommendationCard } from '../../../features/recommendations/components/recommendations-card.component';
-import { Recommendation } from '../../../services/recommendation.service';
+import { RecommendationCard } from '../../features/recommendations/components/recommendations-card.component';
+import { Recommendation } from '../../services/recommendation.service';
 
 const recommendation: Recommendation = {
   id: 'x',
@@ -14,7 +14,7 @@ const recommendation: Recommendation = {
   progression: 'medium',
   complexity: 'easy',
   description: 'Fun',
-  imageUrl: { uri: 'tests/pubg.jpg' },
+  imageUrl: require("../../../assets/icons/resized-images/pubg.jpg"),
   totalGems: 100,
   perTaskGems: 10,
   score: 12,

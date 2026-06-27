@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef } from "react";
 import { Animated, Platform, StyleSheet, Text, View, Image } from "react-native";
-import { Recommendation } from "../../../services/recommendationService";
+import { Recommendation } from "../../../services/recommendation.service";
 
 type Props = { recommendation: Recommendation; index: number };
 

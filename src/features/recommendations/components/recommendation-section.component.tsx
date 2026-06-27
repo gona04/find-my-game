@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { Recommendation } from '../../../services/recommendationService';
+import { Recommendation } from '../../../services/recommendation.service';
 import { RecommendationList } from './recommendations-list.component';
 import { colors } from '../../../theme/colors';
 import { spacingSize, fontSizes } from '../../../theme/spacing';

@@ -1,4 +1,4 @@
-import { getRecommendations } from '../recommendationService';
+import { getRecommendations } from '../recommendation.service';
 
 describe('getRecommendations', () => {
   it('returns max 5 results', () => expect(getRecommendations({}).length).toBeLessThanOrEqual(5));
@@ -11,6 +11,11 @@ describe('getRecommendations', () => {
   it('uses LLM reason when provided', () => {
     const results = getRecommendations({ genres:['RPG'] }, { 'Genshin Impact': 'Custom LLM reason.' });
     expect(results.find((game) => game.title === 'Genshin Impact')?.whyRecommended).toBe('Custom LLM reason.');
+  });
+  it('turns semantic matches into a user-facing sentence', () => {
+    const [first] = getRecommendations({ semanticTerms: ['explore', 'reward'] });
+    expect(first.whyRecommended).toContain('what you described');
+    expect(first.whyRecommended).not.toContain('description match');
   });
   it('falls back to matchReason when no LLM reason', () => {
     const [first] = getRecommendations({ genres:['RPG'] }, {});

@@ -1,4 +1,4 @@
-import { extractPreferencesAndReasons } from '../llmService';
+import { extractPreferencesAndReasons } from '../llm.service';
 import { games } from '../../data/games';
 
 const stream = (text: string) => ({ getReader: () => { let done=false; return { read: async () => done ? { done:true } : (done=true, { done:false, value:new TextEncoder().encode(text) }) }; } });

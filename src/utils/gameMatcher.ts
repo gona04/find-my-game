@@ -24,7 +24,7 @@ export const extractKeywordPreferences = (query: string): GamePreferences => {
   const prefs: GamePreferences = { semanticTerms: tokenize(text).filter((term) => term.length > 2) };
   if (!text) return { matchedFields: 0 };
 
-  if (includesAny(text, ['story', 'storyline', 'narrative', 'immersive'])) prefs.storyline = true;
+  if (includesAny(text, ['story', 'storyline', 'narrative'])) prefs.storyline = true;
   if (includesAny(text, ['adventure', 'quest', 'explore'])) prefs.genres = add(prefs.genres, 'Adventure');
   if (includesAny(text, ['action', 'combat', 'sword', 'parkour'])) prefs.genres = add(prefs.genres, 'Action');
   if (includesAny(text, ['logic', 'puzzle', 'brain', 'riddle'])) prefs.genres = add(prefs.genres, 'Puzzle');
@@ -57,4 +57,16 @@ export const getCatalogMatchStrength = (query: string): number => {
   }));
 };
 
-export const hasMeaningfulPreferences = (prefs: GamePreferences, query = ''): boolean => (prefs.matchedFields ?? countSignals(prefs)) > 0 || getCatalogMatchStrength(query) >= 2;
+export const hasMeaningfulPreferences = (prefs: GamePreferences, query = ''): boolean => {
+  const signals = prefs.matchedFields ?? countSignals(prefs);
+  
+  // If query has emotional language but weak explicit signals, let LLM handle it
+  const emotionalKeywords = ['feel', 'want', 'looking for', 'something that', 'makes me', 'like to', 'kind of'];
+  const hasEmotionalLanguage = emotionalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
+  if (hasEmotionalLanguage && signals < 2) {
+    // Weak explicit match + emotional language → skip Tier 1, let LLM analyze
+    return false;
+  }
+
+  return signals > 0 || getCatalogMatchStrength(query) >= 2;
+};
