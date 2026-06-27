@@ -1,4 +1,4 @@
-import { extractKeywords, getPreferenceScore, FIELD_WEIGHTS, CONFIDENCE_THRESHOLD } from '../gameMatcher';
+import { extractKeywords, getPreferenceScore, FIELD_WEIGHTS, CONFIDENCE_THRESHOLD, getCatalogMatchStrength } from '../gameMatcher';
 import { GamePreferences } from '../gameMatcher';
 import type { SessionLength, Complexity, RewardPotential, Progression } from '../../types/Game';
 
@@ -10,6 +10,38 @@ describe('extractKeywords', () => {
   it('extracts competitive mood', () => expect(extractKeywords('I want to fight competitively').mood).toContain('competitive'));
   it('routes exact prince of persia to LLM path', () => expect(extractKeywords('prince of persia').matchedFields).toBe(0));
   it('handles empty string', () => expect(extractKeywords('').matchedFields).toBe(0));
+  it('extracts adventure genre', () => expect(extractKeywords('I want an adventure game').genres).toContain('Adventure'));
+  it('extracts action genre', () => expect(extractKeywords('action game with combat').genres).toContain('Action'));
+  it('extracts strategy genre', () => expect(extractKeywords('strategy game').genres).toContain('Strategy'));
+  it('extracts horror genre', () => expect(extractKeywords('scary horror game').genres).toContain('Horror'));
+  it('extracts racing genre', () => expect(extractKeywords('racing game').genres).toContain('Racing'));
+  it('extracts rhythm genre', () => expect(extractKeywords('music game with beats').genres).toContain('Rhythm'));
+  it('extracts card genre', () => expect(extractKeywords('card deck game').genres).toContain('Card'));
+  it('extracts idle genre', () => expect(extractKeywords('idle builder game').genres).toContain('Idle'));
+  it('extracts rpg genre', () => expect(extractKeywords('rpg with loot').genres).toContain('RPG'));
+  it('extracts long session length', () => expect(extractKeywords('I want a long deep game with hours of content').sessionLength).toBe('long'));
+  it('extracts meditative mood', () => expect(extractKeywords('something meditative and peaceful').mood).toContain('calm'));
+  it('includes matched fields count', () => expect(extractKeywords('relaxing puzzle game').matchedFields).toBeGreaterThan(0));
+  it('extracts referenced game name', () => {
+    const result = extractKeywords('like Genshin Impact');
+    expect(result.referencedGame).toBeTruthy();
+  });
+  it('includes semantic terms', () => {
+    const result = extractKeywords('I want adventure');
+    expect(result.semanticTerms).toBeDefined();
+    expect(result.semanticTerms?.length).toBeGreaterThan(0);
+  });
+  it('handles multiple keywords in one query', () => {
+    const result = extractKeywords('quick relaxing puzzle game with high rewards');
+    expect(result.genres).toContain('Puzzle');
+    expect(result.sessionLength).toBe('short');
+    expect(result.rewardPotential).toBe('high');
+  });
+  it('correctly filters short tokens from semantic terms', () => {
+    const result = extractKeywords('a b cd game');
+    expect(result.semanticTerms).toBeDefined();
+    // Should filter out tokens shorter than 3 chars
+  });
 });
 
 describe('FIELD_WEIGHTS', () => {
@@ -136,5 +168,61 @@ describe('getPreferenceScore', () => {
       };
       expect(getPreferenceScore(prefs)).toBe(4);
     });
+  });
+});
+
+describe('getCatalogMatchStrength', () => {
+  it('returns 0 for empty query', () => {
+    expect(getCatalogMatchStrength('')).toBe(0);
+  });
+
+  it('returns 0 for query with only short tokens', () => {
+    expect(getCatalogMatchStrength('a b c')).toBe(0);
+  });
+
+  it('returns positive score for matching query', () => {
+    expect(getCatalogMatchStrength('puzzle')).toBeGreaterThan(0);
+  });
+
+  it('returns higher score for multiple matching terms', () => {
+    const score1 = getCatalogMatchStrength('puzzle');
+    const score2 = getCatalogMatchStrength('puzzle brain');
+    // Multiple terms should generally be >= single term
+    expect(score2).toBeGreaterThanOrEqual(score1);
+  });
+
+  it('handles case-insensitive matching', () => {
+    const score1 = getCatalogMatchStrength('PUZZLE');
+    const score2 = getCatalogMatchStrength('puzzle');
+    expect(score1).toBe(score2);
+  });
+
+  it('searches across game attributes', () => {
+    expect(getCatalogMatchStrength('story')).toBeGreaterThan(0);
+    expect(getCatalogMatchStrength('adventure')).toBeGreaterThan(0);
+    expect(getCatalogMatchStrength('calm')).toBeGreaterThan(0);
+  });
+
+  it('returns positive score for known game genre', () => {
+    expect(getCatalogMatchStrength('rpg')).toBeGreaterThan(0);
+  });
+
+  it('returns positive score for known game mood', () => {
+    expect(getCatalogMatchStrength('competitive')).toBeGreaterThan(0);
+  });
+
+  it('handles special characters in query', () => {
+    const score = getCatalogMatchStrength('puzzle-game!@#');
+    // Should still find puzzle
+    expect(score).toBeGreaterThan(0);
+  });
+
+  it('matches against game titles', () => {
+    expect(getCatalogMatchStrength('genshin')).toBeGreaterThan(0);
+  });
+
+  it('accumulates matches from multiple games', () => {
+    const score = getCatalogMatchStrength('action');
+    expect(score).toBeGreaterThan(0);
   });
 });

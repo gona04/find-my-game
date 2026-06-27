@@ -30,7 +30,7 @@ export const extractKeywordPreferences = (query: string): GamePreferences => {
   if (includesAny(text, ['logic', 'puzzle', 'brain', 'riddle'])) prefs.genres = add(prefs.genres, 'Puzzle');
   if (includesAny(text, ['competitive', 'multiplayer', 'arena', 'leaderboard', 'fight'])) prefs.mood = add(prefs.mood, 'competitive');
   if (includesAny(text, ['reward', 'rewards', 'highest', 'earn', 'gems', 'payout'])) prefs.rewardPotential = 'high';
-  if (includesAny(text, ['relaxing', 'relaxed', 'calm', 'chill', 'cozy', 'bed', 'low pressure'])) prefs.mood = add(prefs.mood, 'calm');
+  if (includesAny(text, ['relaxing', 'relaxed', 'calm', 'chill', 'cozy', 'bed', 'low pressure', 'meditative', 'peaceful'])) prefs.mood = add(prefs.mood, 'calm');
   if (includesAny(text, ['strategy', 'strategic', 'tactical'])) prefs.genres = add(prefs.genres, 'Strategy');
   if (includesAny(text, ['short', 'quick', '10 minute', '10 minutes', 'ten minutes'])) prefs.sessionLength = 'short';
   if (includesAny(text, ['long', 'deep', 'hours'])) prefs.sessionLength = 'long';
