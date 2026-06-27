@@ -1,80 +1,222 @@
 # AI Game Concierge
 
-AI Game Concierge is a production-minded Expo + TypeScript prototype for Cash Giraffe. The app presents a Quest Log rewards home and an Explore More discovery surface where players describe what they want to play right now and receive explainable game recommendations.
+AI Game Concierge is a production-minded React Native (Expo) prototype built for the Cash Giraffe take-home assignment. It introduces an AI-powered game discovery experience where players can describe what they want to play in natural language and receive explainable recommendations.
 
-## Problem Statement
+---
 
-Game recommendations often overweight historical behavior. A player who wanted a merge game yesterday may want a logic game today, a story adventure tomorrow, or the highest reward opportunity during a short session. Static history is not the same as current intent.
+# Problem Statement
 
-## Product Hypothesis
+Cash Giraffe recommends games based on existing logic, but sometimes users already know the type of game they want to play.
 
-If users can express their current gaming intent in natural language, Cash Giraffe can recommend games that better match mood, time, reward goals, and genre preferences in the moment. This improves trust because every recommendation includes a clear "Why we recommended this" explanation.
+Examples:
 
-## Architecture Overview
+* "I want something relaxing before bed."
+* "Games similar to Monkey Island."
+* "I only have 10 minutes."
+* "I want the highest reward potential."
 
-- `src/pages` contains screen-level UI for Quest Log and Explore More.
-- `src/components` contains reusable presentation primitives and recommendation-specific cards/lists.
-- `src/store/useGameDiscoveryStore.ts` owns query, loading, routing, errors, and recommendations.
-- `src/utils/gameMatcher.ts` performs local keyword-to-preference extraction.
-- `src/services/recommendationService.ts` scores games across title, genres, mood, rich descriptions, and structured attributes, then returns the top five matches.
-- `src/services/llmService.ts` calls DeepSeek only for ambiguous intent.
-- `src/constants` defines the light, friendly visual system.
+The goal of this prototype is to allow users to search using natural language instead of browsing the catalog manually.
 
-## Routing Logic
+---
 
-1. The user submits a natural-language query.
-2. The app first runs local keyword extraction and catalog inspection across title, genres, mood, description, and structured attributes.
-3. If meaningful preferences or strong catalog matches are found, recommendations are generated locally and `routingPath` is `keyword`.
-4. If the query is ambiguous, the app streams a DeepSeek request and `routingPath` is `llm`.
-5. DeepSeek returns structured JSON preferences, never user-facing chat copy.
+# Product Hypothesis
 
-## AI Flow
+If users can express their current gaming intent in natural language, recommendations become more relevant because they reflect the player's current mood instead of only historical behavior.
 
-Natural Language → Catalog + Keyword Inspection → Optional AI Intent Extraction → Structured Preferences → Weighted Game Matching → Explainable Recommendations
+Every recommendation includes a short explanation describing why it was suggested.
 
-DeepSeek is used as a preference extraction service, not as a chatbot. The UI presents recommendation results rather than a conversational transcript.
+---
 
-## Recommendation Scoring
+# Features
 
-The recommendation engine applies weighted scoring:
+* AI-powered natural language search
+* Explainable recommendations
+* Hybrid keyword + AI routing
+* SERPER-assisted contextual search
+* Reusable component architecture
+* Feature-based project organization
+* Fully typed with TypeScript
+* Jest test suite
 
-- Genre Match: +5
-- Mood Match: +4
-- Storyline Match: +4
-- Reward Potential Match: +3
-- Reward Frequency Match: +2
-- Progression Match: +3
-- Complexity Match: +2
-- Session Length Match: +2
+---
 
-Each result includes `score` and `matchReason` so users understand the recommendation. Description matches add semantic weight because game descriptions contain richer intent signals than tags alone.
+# Architecture
 
-## Why Zustand
+The project is organized using a feature-first architecture.
 
-The requested architecture uses a small centralized game discovery store rather than Redux, MobX, React Query, Firebase, Supabase, or backend state. This keeps prototype state easy to reason about while preserving a scalable boundary between UI, AI extraction, and recommendation scoring.
-
-## Future Improvements
-
-- Add real Cash Giraffe catalog data and reward telemetry.
-- Add personalization signals as optional ranking features rather than hard filters.
-- A/B test keyword-only, LLM-assisted, and hybrid routing.
-- Persist dismissed recommendations locally.
-- Add analytics around query intent, routing path, and recommendation selection.
-- Introduce accessibility-focused motion reduction settings.
-
-## Environment Setup
-
-A `.env` file should already exist and contain:
-
-```bash
-EXPO_PUBLIC_DEEPSEEK_API_KEY=your_deepseek_api_key
+```text
+src/
+│
+├── features/
+│   ├── explore/
+│   ├── quest/
+│   └── recommendations/
+│
+├── shared/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   ├── utils/
+│   └── theme/
+│
+├── store/
+└── assets/
 ```
 
-Install dependencies and start Expo:
+The application separates:
+
+* UI Components
+* Business Logic
+* Search Logic
+* AI Services
+* Recommendation Engine
+* Shared Utilities
+
+making the project easier to scale and maintain.
+
+---
+
+# Search Pipeline
+
+The recommendation pipeline is intentionally hybrid.
+
+```
+User Query
+      │
+      ▼
+Keyword Matching
+      │
+      ├── Strong Match
+      │      │
+      │      ▼
+      │  Recommendation Engine
+      │
+      └── Weak Match
+             │
+             ▼
+       SERPER Context Search
+             │
+             ▼
+      Quality Evaluation
+             │
+      ├── High Confidence
+      │         │
+      │         ▼
+      │  Recommendation Engine
+      │
+      └── Low Confidence
+                │
+                ▼
+         DeepSeek Intent Extraction
+                │
+                ▼
+        Recommendation Engine
+```
+
+The objective is to avoid unnecessary LLM calls while still supporting abstract searches and game references.
+
+---
+
+# Recommendation Engine
+
+Recommendations are ranked using weighted scoring across:
+
+* Genres
+* Mood
+* Storyline
+* Reward Potential
+* Reward Frequency
+* Progression
+* Complexity
+* Session Length
+* Description Similarity
+
+Every recommendation contains:
+
+* score
+* matchReason
+
+so users understand why it was suggested.
+
+---
+
+# Tech Stack
+
+* React Native
+* Expo SDK 54
+* TypeScript
+* Zustand
+* Jest
+* DeepSeek API
+* SERPER API
+
+---
+
+# Testing
+
+The project currently contains:
+
+* **152 passing tests**
+* **7 test suites**
+* **93.46% statement coverage**
+* **94.46% line coverage**
+* **95.38% function coverage**
+
+Tests cover recommendation logic, matching utilities, services, and reusable UI components.
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Run coverage:
+
+```bash
+npm run test:coverage
+```
+
+---
+
+# Environment Setup
+
+Create a `.env.local` file in the project root.
+
+```bash
+EXPO_PUBLIC_DEEPSEEK_API_KEY=YOUR_DEEPSEEK_API_KEY
+EXPO_PUBLIC_SERPER_API_KEY=YOUR_SERPER_API_KEY
+```
+
+Install dependencies:
 
 ```bash
 npm install
-npm run start
 ```
 
-No backend, database, Firebase, Supabase, React Query, Redux, Redux Toolkit, MobX, or app-state Context API is required.
+Run the project:
+
+```bash
+npm start
+```
+
+---
+
+# Future Improvements
+
+Given more time, I would prioritise:
+
+* Vector database for semantic retrieval
+* Backend proxy to protect API keys
+* User personalization based on play history
+* Query caching
+* Analytics and A/B testing
+* Redux Toolkit + Async Thunks for larger-scale state management
+* Real Cash Giraffe reward data integration
+
+---
+
+# Notes
+
+This prototype communicates directly with external AI services for simplicity.
+
+In a production environment, these API calls would be routed through a backend service to protect API keys, enable caching, rate limiting, analytics, and request validation.
