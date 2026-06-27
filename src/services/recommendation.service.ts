@@ -23,19 +23,62 @@ const buildIntentPhrase = (preferences: GamePreferences): string => {
 const buildMatchReason = (game: Game, preferences: GamePreferences, matched: string[]): string => {
   const meaningfulMatches = matched.filter((item) => item !== 'description match' && item !== 'your description');
   const topAttribute = meaningfulMatches[0] ?? (game.storyline ? 'a rich storyline' : `${game.rewardPotential} gem potential`);
-  if (preferences.referencedGame) return truncateReason(`Similar ${game.genres[0].toLowerCase()} gameplay to ${preferences.referencedGame}, with ${topAttribute}`);
+  
+  // For named-game references, provide narrative context
+  if (preferences.referencedGame) {
+    const genreMatch = game.genres[0]?.toLowerCase() || 'action';
+    return truncateReason(`Offers ${genreMatch} gameplay similar to ${preferences.referencedGame} with ${game.sessionLength} sessions and ${game.complexity} complexity.`);
+  }
+  
+  // For mood-based searches
   const mood = preferences.mood?.[0];
-  if (mood && ['calm', 'relaxed', 'relaxing', 'cozy', 'chill'].includes(normalize(mood))) return truncateReason(`Matches your ${mood} vibe — ${game.sessionLength} sessions, ${game.complexity} complexity`);
-  if (preferences.rewardPotential === 'high') return truncateReason(`Top pick for ${game.rewardPotential} gem potential with ${game.sessionLength} sessions`);
-  if (preferences.sessionLength === 'short') return truncateReason(`Perfect for a quick session — ${game.sessionLength} play time, ${game.complexity} to pick up`);
+  if (mood && ['calm', 'relaxed', 'relaxing', 'cozy', 'chill'].includes(normalize(mood))) {
+    return truncateReason(`Perfect ${mood} experience — ${game.sessionLength} sessions of ${game.genres[0]?.toLowerCase() || 'gameplay'} with ${game.complexity} complexity.`);
+  }
+  
+  // For reward-focused searches
+  if (preferences.rewardPotential === 'high') {
+    return truncateReason(`Strong ${game.rewardPotential} gem potential with ${game.genres[0]?.toLowerCase() || 'engaging'} gameplay in ${game.sessionLength} sessions.`);
+  }
+  
+  // For time-constrained searches
+  if (preferences.sessionLength === 'short') {
+    return truncateReason(`Fits a quick session — ${game.genres[0]?.toLowerCase() || 'engaging'} ${game.complexity} gameplay you can pick up fast.`);
+  }
+  
+  // For semantic/intent-based searches
   if (preferences.semanticTerms?.length) {
     const intentPhrase = buildIntentPhrase(preferences);
     const terms = preferences.semanticTerms.filter((term) => term.trim().length > 2).slice(0, 3);
-    if (terms.length && intentPhrase) return truncateReason(`It lines up with what you described around ${terms.join(', ')} and keeps the ${intentPhrase} you asked for.`);
-    if (terms.length) return truncateReason(`It lines up with what you described around ${terms.join(', ')} and keeps the feel you asked for.`);
-    if (intentPhrase) return truncateReason(`This might feel different to you as a ${game.genres[0]?.toLowerCase() || 'game'}, but it captures the ${intentPhrase} you're looking for.`);
+    if (terms.length && intentPhrase) {
+      return truncateReason(`It lines up with what you described around ${terms.join(', ')} and keeps the ${intentPhrase} you asked for.`);
+    }
+    if (terms.length) {
+      return truncateReason(`Features ${terms.slice(0, 2).join(' and ')} that match your description.`);
+    }
+    if (intentPhrase) {
+      return truncateReason(`This ${game.genres[0]?.toLowerCase() || 'game'} captures the ${intentPhrase} you're looking for.`);
+    }
   }
-  return truncateReason(`Matched on: ${(meaningfulMatches.length ? meaningfulMatches : [game.genres[0], `${game.rewardPotential} gem potential`]).join(', ')}`);
+  
+  // Improved fallback: build a meaningful reason from game attributes
+  if (meaningfulMatches.length) {
+    return truncateReason(`Matches on ${meaningfulMatches.slice(0, 2).join(' and ')} — a ${game.complexity} ${game.genres[0]?.toLowerCase() || 'game'}.`);
+  }
+  
+  // Last resort: storytelling about the game's strengths
+  const strengths: string[] = [];
+  if (game.storyline) strengths.push('rich narrative');
+  if (game.genres.length > 0) strengths.push(`${game.genres[0].toLowerCase()} gameplay`);
+  if (game.mood.length > 0) strengths.push(`${game.mood[0].toLowerCase()} vibe`);
+  if (game.rewardPotential === 'high') strengths.push('rewarding progression');
+  
+  if (strengths.length > 0) {
+    return truncateReason(`Features ${strengths.slice(0, 2).join(' and ')} — worth exploring.`);
+  }
+  
+  // Absolute fallback
+  return truncateReason(`A ${game.complexity} ${game.genres[0]?.toLowerCase() || 'game'} that's worth checking out.`);
 };
 
 export const getRecommendations = (preferences: GamePreferences, reasons: Record<string, string> = {}): Recommendation[] => {

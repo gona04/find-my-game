@@ -16,6 +16,7 @@ export function ExploreMoreScreen() {
     loading,
     routingPath,
     error,
+    hasZeroMatch,
     recentSearches,
     onQueryChange,
     onSearch,
@@ -47,7 +48,7 @@ export function ExploreMoreScreen() {
       <RecentSearchList searches={recentSearches} onRecentSearch={onRecentSearch} />
 
       <RecommendationStatus loading={loading} routingPath={routingPath} error={error} />
-      <RecommendationSection recommendations={recommendations} />
+      <RecommendationSection recommendations={recommendations} hasZeroMatch={hasZeroMatch} query={query} />
     </>
   );
 }

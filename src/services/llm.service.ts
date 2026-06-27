@@ -75,16 +75,18 @@ Return exactly one JSON object with the following structure:
 Rules:
 
 * Think about the user's underlying motivation, not only their literal words.
-* If the user names another game, infer what they enjoyed about it.
+* If the user names another game (even if not in catalog), infer what they enjoyed about it and explain how each recommendation captures that same essence.
 * Match games based on emotional experience as well as mechanics.
-* Recommendations should sound like advice from an experienced gamer.
-* Do not invent facts about games.
+* Recommendations should sound like advice from an experienced gamer. For named-game queries, explain the similarity clearly (e.g., "Like Assassin's Creed, it features parkour and historical settings").
+* Do not invent facts about games. Use the catalog data provided.
 * Only include reasons for games that are genuinely good matches.
 * Each reason must be under 120 characters.
+* For every game in the recommendations, provide a reason explaining the match. Never leave reason fields empty.
 * Return ONLY valid JSON.
 * No markdown.
 * No explanation.
 * No code fences.
+* Use exact game titles from the provided catalog as keys in the 'reasons' object.
 `;
 
 const buildUserMessage = (query: string, catalog: Game[]): string => `User query: "${query}"
@@ -149,9 +151,28 @@ Use this to improve your preference extraction and game matching.\n`
     if (!json) return emptyResult();
 
     const parsed = JSON.parse(json) as { preferences?: ExtractedPreferences; reasons?: Record<string, string> };
+
+    // Sanitize reasons: ignore very short or offensive reasons so UI falls back to algorithmic matchReason.
+    const banned = /\b(stupid|stupidly|dumb|idiot|idiotic|moron|sucks|terrible|awful|foul|offensive|insult)\b/i;
+    const rawReasons = parsed.reasons ?? {};
+    const sanitized: Record<string, string> = {};
+    Object.entries(rawReasons).forEach(([title, reason]) => {
+      if (!reason || typeof reason !== 'string') {
+        return;
+      }
+      const tokens = reason.trim().split(/\s+/);
+      if (tokens.length < 3) {
+        return;
+      }
+      if (banned.test(reason)) {
+        return;
+      }
+      sanitized[title] = reason.trim();
+    });
+
     return {
       preferences: parsed.preferences ?? {},
-      reasons: parsed.reasons ?? {},
+      reasons: sanitized,
     };
   } catch {
     return emptyResult();

@@ -6,7 +6,7 @@ import { useGameSearch } from './useGameSearch';
 const PLACEHOLDER_INTERVAL_MS = 3000;
 
 export function useExploreMore() {
-  const { query, setQuery, recommendations, loading, routingPath, error, submitSearch } = useGameSearch();
+  const { query, setQuery, recommendations, loading, routingPath, error, hasZeroMatch, submitSearch } = useGameSearch();
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
   useEffect(() => {
@@ -43,6 +43,7 @@ export function useExploreMore() {
     loading,
     routingPath,
     error,
+    hasZeroMatch,
     recentSearches,
     onSearch,
     onRecentSearch,

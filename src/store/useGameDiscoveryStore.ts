@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { games } from '../data/games';
 
-import { extractKeywordPreferences, hasMeaningfulPreferences, RoutingPath } from '../utils/gameMatcher';
+import { extractKeywordPreferences, getPreferenceScore, CONFIDENCE_THRESHOLD, RoutingPath } from '../utils/gameMatcher';
 import { ExtractedPreferences } from '../types/Game';
 import { fetchSerperContext, SerperGameContext } from '../services/serper.survice';
 import { extractPreferencesAndReasons, getRecommendations } from '../services';
@@ -37,6 +37,7 @@ type GameDiscoveryStore = {
   streamingStatus: string;
   error:           string | null;
   routingPath:     RoutingPath;
+  hasZeroMatch:    boolean;
   // ── Actions ────────────────────────────────────────────────────────────────
   setQuery:        (query: string) => void;
   clearResults:    () => void;
@@ -53,10 +54,11 @@ export const useGameDiscoveryStore = create<GameDiscoveryStore>()(
       streamingStatus: '',
       error:           null,
       routingPath:     null,
+      hasZeroMatch:    false,
 
       // ── Actions ────────────────────────────────────────────────────────────
       setQuery:     (query) => set({ query }),
-      clearResults: () => set({ recommendations: [], error: null, routingPath: null, streamingStatus: '' }),
+      clearResults: () => set({ recommendations: [], error: null, routingPath: null, streamingStatus: '', hasZeroMatch: false }),
 
       searchGames: async (queryOverride) => {
         const currentQuery = (queryOverride ?? get().query).trim();
@@ -71,46 +73,83 @@ export const useGameDiscoveryStore = create<GameDiscoveryStore>()(
         try {
           // ── Tier 1: Keyword ──────────────────────────────────────────────
           const keywordPrefs = extractKeywordPreferences(currentQuery);
-          if (hasMeaningfulPreferences(keywordPrefs, currentQuery)) {
+          const keywordScore = getPreferenceScore(keywordPrefs);
+          console.log(`
+🔍 TIER 1 — Keyword Matching
+Query: "${currentQuery}"
+Extracted Preferences:`, keywordPrefs);
+          console.log(`📊 Keyword Score: ${keywordScore} (threshold: ${CONFIDENCE_THRESHOLD})`);
+          
+          if (keywordScore >= CONFIDENCE_THRESHOLD) {
+            console.log(`✅ TIER 1 PASSED (${keywordScore} >= ${CONFIDENCE_THRESHOLD}) — Using keyword preferences`);
             const recommendations = getRecommendations(keywordPrefs, {});
-            set({ recommendations, routingPath: 'keyword', loading: false, streamingStatus: '', error: recommendations.length ? null : NO_MATCH_ERROR });
+            const allZeroScore = recommendations.every((r) => r.score === 0);
+            set({ recommendations, routingPath: 'keyword', loading: false, streamingStatus: '', hasZeroMatch: allZeroScore, error: recommendations.length ? null : NO_MATCH_ERROR });
             return;
           }
+          console.log(`❌ TIER 1 FAILED (${keywordScore} < ${CONFIDENCE_THRESHOLD}) — Moving to SERP...`);
 
           // ── Tier 2: SERP ─────────────────────────────────────────────────
           // Skip SERP for emotional queries; they need LLM for nuanced understanding
           const isEmotionalQuery = hasEmotionalLanguage(currentQuery);
+          console.log(`\n🔍 TIER 2 — SERP Enrichment`);
+          console.log(`😊 Emotional query detected: ${isEmotionalQuery}`);
+          
+          let serperContext: SerperGameContext | null = null;
           if (!isEmotionalQuery) {
             set({ streamingStatus: 'Looking that up...' });
-            const serperContext = await fetchSerperContext(currentQuery);
-
-            if (serperContext) {
-              const enriched = mergeSerperContext(keywordPrefs, serperContext);
-              if (hasMeaningfulPreferences(enriched, currentQuery)) {
-                const recommendations = getRecommendations(enriched, {});
-                set({ recommendations, routingPath: 'keyword', loading: false, streamingStatus: '', error: recommendations.length ? null : NO_MATCH_ERROR });
-                return;
-              }
-            }
+            serperContext = await fetchSerperContext(currentQuery);
+            console.log(`📡 SERP Context:`, serperContext);
+          } else {
+            console.log(`⏭️  Skipping SERP (emotional query) — will go straight to LLM`);
           }
 
+          const enrichedPrefs = serperContext ? mergeSerperContext(keywordPrefs, serperContext) : keywordPrefs;
+          const enrichedScore = getPreferenceScore(enrichedPrefs);
+          console.log(`📊 Enriched Score: ${enrichedScore} (threshold: ${CONFIDENCE_THRESHOLD})`);
+          console.log(`Enriched Preferences:`, enrichedPrefs);
+          
+          if (enrichedScore >= CONFIDENCE_THRESHOLD) {
+            console.log(`✅ TIER 2 PASSED (${enrichedScore} >= ${CONFIDENCE_THRESHOLD}) — Using SERP-enriched preferences`);
+            const recommendations = getRecommendations(enrichedPrefs, {});
+            const allZeroScore = recommendations.every((r) => r.score === 0);
+            set({ recommendations, routingPath: 'keyword', loading: false, streamingStatus: '', hasZeroMatch: allZeroScore, error: recommendations.length ? null : NO_MATCH_ERROR });
+            return;
+          }
+          console.log(`❌ TIER 2 FAILED (${enrichedScore} < ${CONFIDENCE_THRESHOLD}) — Moving to LLM...`);
+
           // ── Tier 3: LLM ──────────────────────────────────────────────────
+          console.log(`\n🔍 TIER 3 — LLM Analysis`);
+          console.log(`🧠 Calling LLM with query: "${currentQuery}"`);
+          if (serperContext) {
+            console.log(`📡 Injecting SERP context into LLM prompt:`, serperContext);
+          }
+          
           set({ streamingStatus: 'Understanding your vibe...' });
           const { preferences, reasons } = await extractPreferencesAndReasons(
             currentQuery,
             games,
           );
+          console.log(`✅ TIER 3 EXECUTED — LLM Preferences:`, preferences);
+          console.log(`💭 LLM Match Reasons:`, reasons);
 
           set({ streamingStatus: 'Finding your matches...' });
           const recommendations = getRecommendations(preferences, reasons);
-          set({ recommendations, routingPath: 'llm', loading: false, streamingStatus: '', error: recommendations.length ? null : NO_MATCH_ERROR });
+          const allZeroScore = recommendations.every((r) => r.score === 0);
+          console.log(`🎮 Final Recommendations:`, recommendations);
+          console.log(`\n✨ === ROUTING COMPLETE === ✨\n`);
+          set({ recommendations, routingPath: 'llm', loading: false, streamingStatus: '', hasZeroMatch: allZeroScore, error: recommendations.length ? null : NO_MATCH_ERROR });
 
         } catch (error) {
+          console.error(`❌ ROUTING ERROR:`, error);
+          const recommendations = getRecommendations(FALLBACK_PREFS, {});
+          const allZeroScore = recommendations.every((r) => r.score === 0);
           set({
-            recommendations: getRecommendations(FALLBACK_PREFS, {}),
+            recommendations,
             routingPath:     'llm',
             loading:         false,
             streamingStatus: '',
+            hasZeroMatch:    allZeroScore,
             error: error instanceof Error
               ? `${error.message} Showing fallback picks.`
               : 'AI search failed. Showing fallback picks.',

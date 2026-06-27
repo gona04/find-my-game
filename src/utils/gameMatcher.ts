@@ -57,16 +57,63 @@ export const getCatalogMatchStrength = (query: string): number => {
   }));
 };
 
-export const hasMeaningfulPreferences = (prefs: GamePreferences, query = ''): boolean => {
-  const signals = prefs.matchedFields ?? countSignals(prefs);
-  
-  // If query has emotional language but weak explicit signals, let LLM handle it
-  const emotionalKeywords = ['feel', 'want', 'looking for', 'something that', 'makes me', 'like to', 'kind of'];
-  const hasEmotionalLanguage = emotionalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
-  if (hasEmotionalLanguage && signals < 2) {
-    // Weak explicit match + emotional language → skip Tier 1, let LLM analyze
-    return false;
+/**
+ * Field weights for determining preference confidence score.
+ * Genres and mood are weighted 2 because they are semantically the most meaningful.
+ * Other fields are weighted 1.
+ */
+export const FIELD_WEIGHTS = {
+  genres: 2,
+  mood: 2,
+  sessionLength: 1,
+  rewardPotential: 1,
+  rewardFrequency: 1,
+  progression: 1,
+  complexity: 1,
+  storyline: 1,
+} as const;
+
+/**
+ * Confidence threshold for routing decisions.
+ * Score >= CONFIDENCE_THRESHOLD indicates enough structured signal.
+ * - Tier 1 (keyword): pass immediately
+ * - Tier 2 (SERP): pass after enrichment
+ * - Tier 3 (LLM): used as fallback when score remains < threshold
+ */
+export const CONFIDENCE_THRESHOLD = 4;
+
+/**
+ * Calculates a preference confidence score based on weighted fields.
+ * Uses weighted scoring:
+ * - genres (non-empty): 2 points
+ * - mood (non-empty): 2 points
+ * - other fields (when present): 1 point each
+ * 
+ * Score >= CONFIDENCE_THRESHOLD (4) means enough structured signal.
+ * 
+ * @param prefs - Extracted game preferences
+ * @returns numeric confidence score (0+)
+ */
+export const getPreferenceScore = (prefs: GamePreferences): number => {
+  let totalWeight = 0;
+
+  // genres: +2 if non-empty array
+  if (Array.isArray(prefs.genres) && prefs.genres.length > 0) {
+    totalWeight += FIELD_WEIGHTS.genres;
   }
 
-  return signals > 0 || getCatalogMatchStrength(query) >= 2;
+  // mood: +2 if non-empty array
+  if (Array.isArray(prefs.mood) && prefs.mood.length > 0) {
+    totalWeight += FIELD_WEIGHTS.mood;
+  }
+
+  // All other fields: +1 if present (not undefined)
+  if (prefs.sessionLength !== undefined) totalWeight += FIELD_WEIGHTS.sessionLength;
+  if (prefs.rewardPotential !== undefined) totalWeight += FIELD_WEIGHTS.rewardPotential;
+  if (prefs.rewardFrequency !== undefined) totalWeight += FIELD_WEIGHTS.rewardFrequency;
+  if (prefs.progression !== undefined) totalWeight += FIELD_WEIGHTS.progression;
+  if (prefs.complexity !== undefined) totalWeight += FIELD_WEIGHTS.complexity;
+  if (prefs.storyline !== undefined) totalWeight += FIELD_WEIGHTS.storyline;
+
+  return totalWeight;
 };

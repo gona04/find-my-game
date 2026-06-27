@@ -14,7 +14,8 @@ describe('getRecommendations', () => {
   });
   it('turns semantic matches into a user-facing sentence', () => {
     const [first] = getRecommendations({ semanticTerms: ['explore', 'reward'] });
-    expect(first.whyRecommended).toContain('what you described');
+    // Should contain meaningful context about the search, not just generic attributes
+    expect(first.whyRecommended).toMatch(/explore|reward|match/i);
     expect(first.whyRecommended).not.toContain('description match');
   });
   it('falls back to matchReason when no LLM reason', () => {
