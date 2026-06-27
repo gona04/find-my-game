@@ -1,0 +1,1 @@
+export const recentSearches = ['Cozy games before bed', 'Games with lots of gems', 'Short logic challenge'];
